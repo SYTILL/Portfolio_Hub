@@ -12,7 +12,7 @@ const BACKGROUND_STAR_COLORS = [
 ];
 const BACKGROUND_STAR_SIZE = 3;
 
-const SPACE_SIZE = 1000; //radius from center
+const SPACE_SIZE = 1500; //radius from center
 const DIMENSION = 3;
 
 const getRandomInt = (min: number, max: number) => {
@@ -27,7 +27,7 @@ const setRandomStarPos = (size: number) => {
     const y = Math.random() * size * 2 - size;
     const z = Math.random() * size * 2 - size;
     const dis = Math.sqrt(x * x + y * y + z * z);
-    if (dis < 400 || size < dis) {
+    if (dis < 100 || size < dis) {
         return setRandomStarPos(size);
     }
     return [x, y, z];

@@ -1,118 +1,91 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import CoreStar from './mesh/star/CoreStar';
-import { OrbitControls, Stats } from '@react-three/drei'
+import { Html, OrbitControls, Stats } from '@react-three/drei'
 import BackgroundStars from './mesh/background/BackgroundStars';
 import Network from './mesh/star/NetworkGlobe';
 import NebulaCloud from './mesh/background/NebulaCloud';
 import SetCameraPosition from './helperFunction/SetCameraPosition';
 import ImageBox from './mesh/star/ImageBox';
-import { useEffect, useRef } from 'react';
+import PixelatedEffect from './helperFunction/PixelatedEffect';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import Grid from './mesh/background/Grid';
+import { Grid as GridHelper } from '@react-three/drei';
+import { useState } from 'react';
+import MorseCodeLine from './mesh/ui/Outline';
+import Outline from './mesh/ui/Outline';
+import DrawOutline from './mesh/ui/Outline';
+import TopUI from './mesh/ui/TopUI';
 
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPixelatedPass } from 'three/addons/postprocessing/RenderPixelatedPass.js';
-
-
-function PixelatedEffect({ pixelSize }: { pixelSize: number }) {
-    const { gl, scene, camera, size } = useThree();
-    const composer = useRef<any>();
-  
-    useEffect(() => {
-      // Initialize the composer and pass
-      const renderPass = new RenderPixelatedPass(pixelSize, scene, camera);
-      composer.current = new EffectComposer(gl);
-      composer.current.addPass(renderPass);
-  
-      // Handle resize updates
-      const handleResize = () => {
-        const { width, height } = gl.domElement;
-        gl.setSize(width, height);
-        composer.current.setSize(width, height);
-        camera.updateProjectionMatrix();
-      };
-  
-      // Set up resize listener
-      window.addEventListener('resize', handleResize);
-  
-      // Cleanup on unmount
-      return () => {
-        composer.current?.dispose();
-        window.removeEventListener('resize', handleResize);
-      };
-    }, [gl, scene, camera, pixelSize]);
-  
-    useFrame(() => {
-      composer.current?.render();
-    }, 1);
-  
-    return null;
-  }
-
-
-// enum RenderMode {
-//     NORMAL,
-//     WIREFRAME,
-//     LOWBUDGET,
-//     ASCII,
-//     PIXEL,
-// }
+enum RenderTypes {
+    NORMAL = "normal",
+    WIREFRAME = "wireframe",
+    LOWBUDGET = "lowbudget",
+    ASCII = "ascii",
+    PIXEL = "pixel",
+}
 
 type Vector3 = [number, number, number];
 
-const CAMERA_POSITION: Vector3 = [0, 50, 50];
+const CAMERA_POSITION: Vector3 = [100, 100, 100];
 const CAMERA_ROTATION: Vector3 = [
     -45 * (Math.PI / 180),
-    0,
+    -45 * (Math.PI / 180),
     0,
 ];
 const CAMERA_FAR = 30000;
 
 export default function Screen() {
-
+    const [renderMode, setRenderMode]
+        = useState<RenderTypes>(RenderTypes.NORMAL);
 
     const camera = {
         position: CAMERA_POSITION,
         rotation: CAMERA_ROTATION,
-        zoom: 10,
-        near: 1,
+        zoom: 5,
+        near: 0.1,
         far: CAMERA_FAR,
         //fov: 120,
     };
 
     return (
-        <Canvas
-            orthographic
-            camera={camera}
-            style={{ height: '100vh', width: '100vw' }}
+        <div style={{ fontFamily: 'Rubik', cursor: "default", userSelect: "none" }}>
+            <Canvas
+                camera={camera}
+                style={{ height: '100vh', width: '100vw' }}
+            >
+                <color attach="background" args={[(renderMode == RenderTypes.WIREFRAME) ? '#fff' : '#000']} />
+                <ambientLight color="#fff" intensity={5} />
+                <BackgroundStars sizeAttenuation={false} />
+                <BackgroundStars sizeAttenuation={true} />
 
-        >
-            <color attach="background" args={['#000']} />
-            <ambientLight color="#fff" intensity={5} />
-            <axesHelper args={[100]} />
-            <BackgroundStars sizeAttenuation={false} />
-            <BackgroundStars sizeAttenuation={true} />
+                {false && <Network />}
 
-            {/* <Network /> */}
+                <CoreStar pos={[-16, 10, -10]} label={['Coding', 'Projects']} />
+                <CoreStar pos={[1, 5, 12]} label={['Music ', 'Productions']} />
+                <CoreStar pos={[10, 9, -10]} label={['About', ' Me']} />
 
-            <CoreStar pos={[-16, 20, 10]} label='Coding Projects' />
-            <CoreStar pos={[1, 16, 32]} label='Music Productions' />
-            <CoreStar pos={[10, 20, 10]} label='About me' />
+                {false && <NebulaCloud />}
 
-            {/* <NebulaCloud /> */}
-
-            <ImageBox imagePath='./images/icon/code.png' />
+                {false && <ImageBox imagePath='./images/icon/code.png' />}
 
 
-            <OrbitControls minZoom={4} maxZoom={20} />
-            <Stats />
+                {(renderMode == RenderTypes.PIXEL) && <PixelatedEffect pixelSize={4} />}
 
+                {/* <SetCameraPosition position={CAMERA_POSITION} rotation={CAMERA_ROTATION} /> */}
+                {/* <AuroraShader /> */}
+                {/* <BackgroundImage /> */}
+                {/* <Test /> */}
 
+                <OrbitControls minDistance={50} maxDistance={500} target={[0, 0, 0]} />
+                {/* <Stats /> */}
 
-            {/* <PixelatedEffect pixelSize={4} /> */}
+                {/* {<axesHelper args={[100]} />} */}
+                {(renderMode == RenderTypes.WIREFRAME) && <Grid size={100} step={5} />}
+                {/* <GridHelper sectionSize={10} infiniteGrid cellSize={5}/> */}
 
-            {/* <SetCameraPosition position={CAMERA_POSITION} rotation={CAMERA_ROTATION} /> */}
-            {/* <AuroraShader /> */}
-            {/* <BackgroundImage /> */}
-            {/* <Test /> */}
-        </Canvas>
+            </Canvas>
+            <TopUI />
+        </div>
+        
     );
 }

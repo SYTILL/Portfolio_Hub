@@ -26,11 +26,6 @@ function Detail({ p }: { p: Project }) {
         {p.stack.map(s => <span key={s}>{s}</span>)}
         <span className={`st${p.status === 'live' ? ' live' : ''}`}>{p.statusText}</span>
       </div>
-      {p.case && (
-        <button type="button" className="d-case" onClick={() => actions.openCase(p.id)}>
-          Open case file <span aria-hidden="true">▸</span>
-        </button>
-      )}
       {p.links && (
         <div className="d-lk">
           {p.links.map(([label, url]) => <a key={url} href={url} target="_blank" rel="noopener">{label} ↗</a>)}

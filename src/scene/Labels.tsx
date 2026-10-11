@@ -16,7 +16,7 @@ import { CENTERS } from './util';
 // A selected star with a case file gets a leader line up and to the right ending in a "View case" button
 // (mirrored to the left near the right edge). It lives beside the aria-hidden label layer so it can be clicked and focused.
 const IDX: Record<string, number> = Object.fromEntries(PROJECTS.map((p, i) => [p.id, i]));
-const DIAG = 30, RUN = 16;
+const DIAG = 50, RUN = 16;
 type Callout = { d: HTMLDivElement; btn: HTMLButtonElement; w: number; id: string | null; on: boolean; flip: boolean };
 export function Labels({ layer }: { layer: HTMLDivElement }) {
   const { camera, size } = useThree();
@@ -40,6 +40,8 @@ export function Labels({ layer }: { layer: HTMLDivElement }) {
     });
     const cd = document.createElement('div');
     cd.className = 'callout';
+    cd.style.setProperty('--cx', `${DIAG + RUN}px`);
+    cd.style.setProperty('--cy', `${-DIAG}px`);
     cd.inert = true;
     cd.innerHTML = `<svg class="callout-ln" aria-hidden="true"><polyline points="6,-6 ${DIAG},-${DIAG} ${DIAG + RUN},-${DIAG}"/></svg><button type="button" class="callout-btn">View case <span aria-hidden="true">▸</span></button>`;
     const btn = cd.querySelector('button')!;

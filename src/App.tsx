@@ -4,6 +4,7 @@ import { CFG, TUNER_ON, onRetune } from './config';
 import { Scene } from './scene/Scene';
 import { Docks } from './ui/Docks';
 import { Crumb, Hint, Toast } from './ui/Chrome';
+import { Ambience } from './ui/Ambience';
 import { CaseFile } from './ui/CaseFile';
 import { useCaseHash } from './ui/caseHash';
 
@@ -55,6 +56,7 @@ export default function App() {
         <div className="dock dock-r" ref={setRight} aria-label="Right dock" />
       </div>
       {root && left && right && <Docks root={root} left={left} right={right} />}
+      <Ambience />
       <CaseFile />
       <Toast />
       {TUNER_ON && (

@@ -209,3 +209,23 @@ html,body{margin:0;height:100%;background:#04070f}
 .callout-btn:focus-visible{outline:1px solid var(--gold-hi);outline-offset:2px}
 .callout-btn span{color:var(--gold);margin-left:2px}
 @media (prefers-reduced-motion:reduce){.callout.on .callout-ln polyline,.callout.on .callout-btn{transition:none}}
+
+/* Ambience player: a small chip in the bottom-right corner; the volume slider slides out on hover or focus. */
+.amb{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:45;display:flex;align-items:center;gap:0;background:var(--p-bg);border:1px solid var(--line);box-shadow:0 0 0 3px var(--ring);color:var(--sub);font-size:13px}
+.amb-btn{appearance:none;display:flex;align-items:center;gap:8px;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:.08em;padding:6px 10px;cursor:pointer}
+.amb-btn:hover{color:var(--ink)}
+.amb.on .amb-btn{color:var(--gold)}
+.amb-btn:focus-visible,.amb-vol:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
+.amb-bars{display:flex;align-items:flex-end;gap:2px;height:11px}
+.amb-bars i{width:2px;height:100%;background:currentColor;transform:scaleY(.25);transform-origin:bottom}
+.amb.on .amb-bars i{animation:amb-lvl 1.3s ease-in-out infinite alternate}
+.amb.on .amb-bars i:nth-child(2){animation-duration:1.7s;animation-delay:-.5s}
+.amb.on .amb-bars i:nth-child(3){animation-duration:1.1s;animation-delay:-.2s}
+.amb.on .amb-bars i:nth-child(4){animation-duration:1.5s;animation-delay:-.9s}
+@keyframes amb-lvl{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+.amb-vol{width:0;margin:0;opacity:0;accent-color:var(--gold);transition:width calc(.2s / var(--spd,1)),opacity calc(.2s / var(--spd,1)),margin calc(.2s / var(--spd,1))}
+.amb:hover .amb-vol,.amb:focus-within .amb-vol{width:72px;opacity:1;margin-right:10px}
+.dock-r{padding-bottom:48px}
+@media (hover:none){.amb-vol{display:none}}
+@media (max-width:760px){.amb-t{display:none}.amb-btn{padding:8px 10px}}
+@media (prefers-reduced-motion:reduce){.amb.on .amb-bars i{animation:none;transform:scaleY(.7)}.amb-vol{transition:none}}

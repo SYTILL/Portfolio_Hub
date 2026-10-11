@@ -4,7 +4,7 @@ import { CFG, TUNER_ON, onRetune } from './config';
 import { Scene } from './scene/Scene';
 import { Docks } from './ui/Docks';
 import { Crumb, Hint, Toast } from './ui/Chrome';
-import { Ambience } from './ui/Ambience';
+import { Tray } from './ui/Tray';
 import { CaseFile } from './ui/CaseFile';
 import { useCaseHash } from './ui/caseHash';
 
@@ -51,15 +51,12 @@ export default function App() {
         <div className="mid">
           <Crumb />
           <div className="cs-focus" ref={setFocus} />
-          {/* The legend and the ambience player share the bottom row between the docks, so the player never covers a panel. */}
-          <div className="mid-foot">
-            <Hint />
-            <div className="amb-slot"><Ambience /></div>
-          </div>
+          <Hint />
         </div>
         <div className="dock dock-r" ref={setRight} aria-label="Right dock" />
       </div>
       {root && left && right && <Docks root={root} left={left} right={right} />}
+      {root && <Tray root={root} />}
       <CaseFile />
       <Toast />
       {TUNER_ON && (

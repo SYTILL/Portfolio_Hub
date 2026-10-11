@@ -15,7 +15,7 @@ html,body{margin:0;height:100%;background:#04070f}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:#0d1528;color:var(--ink);border:var(--p-border);box-shadow:var(--p-shadow);padding:9px 16px;font-size:15px;font-style:italic;max-width:calc(100% - 32px);text-align:center}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* Star-chart panels: gold grid lines on top, then each panel's own sprinkle of tiny stars (--p-stars, --p-tile set per element from script), then the navy ground. */
-.p,.crumb,.case,.amb{--p-bg:linear-gradient(rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,linear-gradient(90deg,rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,var(--p-stars,none) 0 0/var(--p-tile,320px) var(--p-tile,320px),linear-gradient(180deg,#14203a,#0d1528)}
+.p,.crumb,.case,.tray{--p-bg:linear-gradient(rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,linear-gradient(90deg,rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,var(--p-stars,none) 0 0/var(--p-tile,320px) var(--p-tile,320px),linear-gradient(180deg,#14203a,#0d1528)}
 .cs-map{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none}
 .cs-map:active{cursor:grabbing}
 .cs-ui{--lw:300px;--rw:300px;position:absolute;inset:0;display:grid;grid-template-columns:var(--lw) minmax(0,1fr) var(--rw);gap:12px;padding:12px;pointer-events:none;transition:grid-template-columns calc(.35s / var(--spd,1)) cubic-bezier(.2,.8,.2,1)}
@@ -219,11 +219,14 @@ html,body{margin:0;height:100%;background:#04070f}
 .callout-btn span{color:var(--gold);margin-left:2px}
 @media (prefers-reduced-motion:reduce){.callout.on .callout-ln polyline,.callout.on .callout-btn{transition:none}}
 
-/* Ambience player: a small chip at the right end of the legend row; the credit and volume slider slide out to the left on hover or focus. */
-.mid-foot{align-self:stretch;display:grid;grid-template-columns:120px minmax(0,1fr) 120px;align-items:end;gap:8px}
-.mid-foot .hint{grid-column:2}
-.amb-slot{grid-column:3;position:relative;height:30px;pointer-events:auto}
-.amb{position:absolute;right:0;bottom:0;z-index:5;width:max-content;white-space:nowrap;display:flex;align-items:center;gap:0;background:var(--p-bg);border:1px solid var(--line);box-shadow:0 0 0 3px var(--ring);color:var(--sub);font-size:13px}
+/* Bottom-right tray: theme switch + ambience player. Slides left (--tray-r, set from script) only when the right dock's panels reach it.
+   The credit and volume slider slide out to the left on hover or focus. */
+.tray{position:fixed;right:var(--tray-r,14px);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:45;display:flex;align-items:stretch;background:var(--p-bg);border:1px solid var(--line);box-shadow:0 0 0 3px var(--ring);transition:right calc(.35s / var(--spd,1)) cubic-bezier(.2,.8,.2,1)}
+.tray-theme{appearance:none;display:grid;place-items:center;width:32px;border:0;border-right:1px solid var(--line-soft);background:transparent;color:var(--gold);cursor:pointer}
+.tray-theme:hover{background:var(--row-hover);color:var(--gold-hi)}
+.tray-theme:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
+.tray-theme svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.amb{white-space:nowrap;display:flex;align-items:center;color:var(--sub);font-size:13px}
 .amb-btn{appearance:none;display:flex;align-items:center;gap:8px;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:.08em;padding:6px 10px;cursor:pointer}
 .amb-btn:hover{color:var(--ink)}
 .amb.on .amb-btn{color:var(--gold)}
@@ -241,5 +244,12 @@ html,body{margin:0;height:100%;background:#04070f}
 .amb:hover .amb-credit,.amb:focus-within .amb-credit{max-width:240px;opacity:1;padding-left:12px}
 .sc-player{display:block;width:100%;height:170px;border:1px solid var(--line-soft);background:#0a1120}
 @media (hover:none){.amb-vol{display:none}}
-@media (max-width:760px){.amb-t{display:none}.amb-btn{padding:8px 10px}.mid-foot{display:block;position:absolute;top:310px;right:10px;z-index:3}.amb-slot{width:40px;height:34px}}
+@media (max-width:760px){.amb-t{display:none}.amb-btn{padding:8px 10px}.tray{position:absolute;top:312px;bottom:auto;right:10px}}
 @media (prefers-reduced-motion:reduce){.amb.on .amb-bars i{animation:none;transform:scaleY(.7)}.amb-vol{transition:none}}
+
+/* Light = edit mode: the whole page inverted (hue kept), photos and embeds turned back to their real colors.
+   The theme switch reveals the new look as a growing circle (view transition, clip-path set from script). */
+html[data-theme="light"],html[data-theme="light"] body{background:#fbf8f0}
+html[data-theme="light"] .cs{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="light"] .cs :is(img,iframe){filter:invert(1) hue-rotate(180deg)}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}

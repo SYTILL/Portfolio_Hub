@@ -5,6 +5,7 @@ import { Constellations } from './Constellations';
 import { CameraRig } from './CameraRig';
 import { Labels } from './Labels';
 import { Meteors } from './Meteors';
+import { EditGrid } from './EditGrid';
 
 interface Props {
   mapEl: HTMLDivElement;
@@ -21,6 +22,7 @@ export function Scene({ mapEl, focusEl, layerEl, meteorEl }: Props) {
       <CameraRig mapEl={mapEl} focusEl={focusEl} />
       <StarField />
       <Armillary />
+      <EditGrid />
       <Constellations />
       <Labels layer={layerEl} />
       <Meteors canvas={meteorEl} />

@@ -22,7 +22,7 @@ function respond(raw: string): ReactNode[] | 'clear' {
   switch (head.toLowerCase()) {
     case 'help':
       return [
-        <><K>ls [field]</K>open a constellation: mobile, desktop, web, lab</>,
+        <><K>ls [field]</K>open a constellation: mobile, desktop, web, lab, music</>,
         <><K>open [name]</K>show a project</>,
         <><K>home</K>back to the full map</>,
         <><K>whoami</K>about me</>,
@@ -31,7 +31,7 @@ function respond(raw: string): ReactNode[] | 'clear' {
       ];
     case 'ls': {
       const cat = arg.toLowerCase();
-      if (cat && !isCat(cat)) return [<Err>There’s no constellation called “{arg}”. Try mobile, desktop, web or lab.</Err>];
+      if (cat && !isCat(cat)) return [<Err>There’s no constellation called “{arg}”. Try mobile, desktop, web, lab or music.</Err>];
       if (cat && isCat(cat)) actions.setFocus(cat);
       return PROJECTS.filter(p => !cat || p.cat === cat).sort(newest)
         .map(p => <><span className="t-d">{ym(p.start).replace(' 20', ' ’')}</span>{p.name}</>);

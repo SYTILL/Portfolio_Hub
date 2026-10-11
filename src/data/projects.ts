@@ -1,6 +1,7 @@
 import { CASES } from './cases';
+import { TRACKS } from './tracks';
 
-export type CatKey = 'mobile' | 'desktop' | 'web' | 'lab';
+export type CatKey = 'mobile' | 'desktop' | 'web' | 'lab' | 'music';
 export type Status = 'live' | 'wip' | 'proto' | 'lab';
 
 export interface Project {
@@ -17,6 +18,8 @@ export interface Project {
   links?: [label: string, url: string][];
   /** The long write-up shown in the case file. */
   case?: CaseFile;
+  /** Set for music: the star is a released track rather than a project. */
+  track?: { url: string; genre: string; length: string };
 }
 
 export interface Shot { file: string; alt: string; kind: 'phone' | 'poster' | 'window' }
@@ -30,16 +33,18 @@ export interface CaseFile {
   shots: Shot[];
 }
 
-export const CATS: Record<CatKey, { label: string }> = {
-  mobile: { label: 'Mobile' },
-  desktop: { label: 'Desktop' },
-  web: { label: 'Web' },
-  lab: { label: 'Lab' },
+export const CATS: Record<CatKey, { label: string; unit: string }> = {
+  mobile: { label: 'Mobile', unit: 'projects' },
+  desktop: { label: 'Desktop', unit: 'projects' },
+  web: { label: 'Web', unit: 'projects' },
+  lab: { label: 'Lab', unit: 'projects' },
+  music: { label: 'Music', unit: 'tracks' },
 };
 export const CAT_KEYS = Object.keys(CATS) as CatKey[];
 
 // To add a project, add one entry here. Its star, label, list row and catalog number follow automatically.
-export const PROJECTS: Project[] = [
+// PROJECTS is every star on the map (tracks included); APPS is the software work that the stats count.
+const WORK: Project[] = [
   { id: 'beonyeok', name: 'Beonyeok', cat: 'mobile', start: '2026-03', status: 'live', statusText: 'Live on App Store & Google Play',
     one: 'Learn Korean through K-pop lyrics', stack: ['Expo', 'React Native', 'Supabase', 'RevenueCat', 'AdMob'],
     points: ['Tap any word for its meaning, pronunciation and grammar; quizzes and study streaks', 'Google sign-in, subscriptions (RevenueCat) and ads (AdMob)', 'Landing pages in English, Japanese, Spanish, Portuguese and Chinese', 'Built a separate lyric-video tool with Python and Remotion'],
@@ -79,6 +84,8 @@ export const PROJECTS: Project[] = [
   { id: 'chart', name: 'Chart Pattern Bot', cat: 'lab', start: '2026-03', status: 'lab', statusText: 'Lab', one: 'Detects order blocks, fair value gaps and trendlines, with backtests', stack: ['Python'] },
   { id: 'oxroot', name: '0xRoot', cat: 'lab', start: '2026-04', status: 'lab', statusText: 'Lab', one: 'An L-system tree generator with CRT, pixel and paper render styles', stack: ['JavaScript', 'Canvas'] },
 ];
+export const PROJECTS: Project[] = [...WORK, ...TRACKS];
+export const APPS = WORK;
 
 for (const p of PROJECTS) if (CASES[p.id]) p.case = CASES[p.id];
 
@@ -87,12 +94,13 @@ export const byStart = (a: Project, b: Project) => (a.start < b.start ? -1 : a.s
 export const newest = (a: Project, b: Project) => byStart(b, a);
 export const CHRONO = [...PROJECTS].sort(byStart);
 export const ORDER: Record<string, number> = Object.fromEntries(CHRONO.map((p, i) => [p.id, i]));
-// Catalog number in the order projects were started, like a star catalog.
-export const CATNO: Record<string, string> = Object.fromEntries(CHRONO.map((p, i) => [p.id, 'JY-' + String(i + 1).padStart(2, '0')]));
+// Catalog numbers in start order, like a star catalog: JY-01… for projects, AO-01… for tracks (released as aonova).
+const catalog = (list: Project[], prefix: string) => [...list].sort(byStart).map((p, i) => [p.id, prefix + String(i + 1).padStart(2, '0')]);
+export const CATNO: Record<string, string> = Object.fromEntries([...catalog(WORK, 'JY-'), ...catalog(TRACKS, 'AO-')]);
 
 export const FIRST_YEAR = '2026';
-export const SINCE = PROJECTS.filter(p => p.start >= `${FIRST_YEAR}-01`);
-export const SHIPPED = PROJECTS.filter(p => p.status === 'live');
+export const SINCE = APPS.filter(p => p.start >= `${FIRST_YEAR}-01`);
+export const SHIPPED = APPS.filter(p => p.status === 'live');
 export const MONTHS = ['2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10'];
 export const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const ym = (s: string) => `${MON[+s.slice(5) - 1]} ${s.slice(0, 4)}`;

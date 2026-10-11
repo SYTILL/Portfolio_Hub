@@ -12,6 +12,7 @@ export function Ambience() {
         <span className="amb-bars" aria-hidden="true"><i /><i /><i /><i /></span>
         <span className="amb-t">{playing ? 'Ambience' : 'Sound off'}</span>
       </button>
+      <span className="amb-credit">Space Ambience · by Junsang Yoon</span>
       <input
         type="range"
         className="amb-vol"

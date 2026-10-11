@@ -225,6 +225,9 @@ html,body{margin:0;height:100%;background:#04070f}
 @keyframes amb-lvl{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
 .amb-vol{width:0;margin:0;opacity:0;accent-color:var(--gold);transition:width calc(.2s / var(--spd,1)),opacity calc(.2s / var(--spd,1)),margin calc(.2s / var(--spd,1))}
 .amb:hover .amb-vol,.amb:focus-within .amb-vol{width:72px;opacity:1;margin-right:10px}
+.amb-credit{order:-1;max-width:0;overflow:hidden;white-space:nowrap;opacity:0;font-style:italic;color:var(--muted);transition:max-width calc(.25s / var(--spd,1)),opacity calc(.25s / var(--spd,1)),padding calc(.25s / var(--spd,1))}
+.amb:hover .amb-credit,.amb:focus-within .amb-credit{max-width:240px;opacity:1;padding-left:12px}
+.sc-player{display:block;width:100%;height:170px;border:1px solid var(--line-soft);background:#0a1120}
 .dock-r{padding-bottom:48px}
 @media (hover:none){.amb-vol{display:none}}
 @media (max-width:760px){.amb-t{display:none}.amb-btn{padding:8px 10px}}

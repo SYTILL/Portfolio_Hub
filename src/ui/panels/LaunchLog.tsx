@@ -1,6 +1,6 @@
-import { MON, MONTHS, PROJECTS } from '../../data/projects';
+import { APPS, MON, MONTHS } from '../../data/projects';
 
-const COUNTS = MONTHS.map(m => PROJECTS.filter(p => p.start === m).length);
+const COUNTS = MONTHS.map(m => APPS.filter(p => p.start === m).length);
 const W = 320, BASE = 100, TOP = 20, STEP = W / MONTHS.length, BW = 22, MAX = Math.max(...COUNTS);
 const label = (m: string) => MON[+m.slice(5) - 1];
 

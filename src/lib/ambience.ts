@@ -95,7 +95,20 @@ function stop() {
   emit({ playing: false });
 }
 
+// While a SoundCloud track plays, the ambience steps aside and comes back when the track stops.
+let trackPlaying = false, ducked = false;
+export function duckAmbience(on: boolean) {
+  if (on) {
+    trackPlaying = true;
+    if (snap.playing) { ducked = true; stop(); }
+  } else if (trackPlaying) {
+    trackPlaying = false;
+    if (ducked) { ducked = false; start(); }
+  }
+}
+
 export function toggleAmbience() {
+  ducked = false;
   if (snap.playing) stop();
   else start();
 }
@@ -112,7 +125,8 @@ export function armAmbience(player: () => Element | null) {
   const go = (e: Event) => {
     off();
     if (player()?.contains(e.target as Node)) return;
-    start();
+    if (trackPlaying) ducked = true;
+    else start();
   };
   const off = () => {
     window.removeEventListener('pointerup', go, true);

@@ -58,7 +58,7 @@ export function disposeTree(obj: THREE.Object3D) {
 }
 
 // Constellation centers, and each project's position in a loose ring around its center.
-export const CENTERS: Record<CatKey, [number, number, number]> = { mobile: [-24, 7, -6], desktop: [22, 10, 4], web: [6, -15, -10], lab: [-14, -13, 14] };
+export const CENTERS: Record<CatKey, [number, number, number]> = { mobile: [-24, 7, -6], desktop: [22, 10, 4], web: [6, -15, -10], lab: [-14, -13, 14], music: [4, 18, -22] };
 export const POS: Record<string, THREE.Vector3> = (() => {
   const pos: Record<string, THREE.Vector3> = {};
   for (const cat of CAT_KEYS) {

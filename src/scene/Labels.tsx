@@ -27,7 +27,7 @@ export function Labels({ layer }: { layer: HTMLDivElement }) {
       const d = document.createElement('div');
       d.className = 'cname';
       const count = PROJECTS.filter(p => p.cat === k).length;
-      d.innerHTML = `<b>${CATS[k].label.toUpperCase()}</b><small>${count} projects</small>`;
+      d.innerHTML = `<b>${CATS[k].label.toUpperCase()}</b><small>${count} ${CATS[k].unit}</small>`;
       layer.appendChild(d);
       return { k, d, w: 0, h: 0, life: -1 };
     });

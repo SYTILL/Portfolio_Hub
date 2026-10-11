@@ -18,7 +18,7 @@ const SCHEMA: { g: string; open?: boolean; items: Item[] }[] = [
     { k: 'ringDur', label: '고리 하나가 커지는 시간', min: 0.1, max: 6, step: 0.05, kind: 'time' },
     { k: 'panels', label: '첫 패널 등장', min: 0, max: 6, step: 0.05, kind: 'time' },
     { k: 'panelStep', label: '패널 사이 간격', min: 0, max: 1, step: 0.01, kind: 'time' },
-    { k: 'crumb', label: '위쪽 경로(HOME / …) 등장', min: 0, max: 6, step: 0.05, kind: 'time' },
+    { k: 'crumb', label: '위쪽 경로(STAR MAP / …) 등장', min: 0, max: 6, step: 0.05, kind: 'time' },
     { k: 'stars', label: '첫 프로젝트 별 점등', min: 0, max: 6, step: 0.05, kind: 'time' },
     { k: 'step', label: '별 사이 간격', min: 0, max: 1, step: 0.01, kind: 'time' },
     { k: 'rise', label: '별 하나가 켜지는 시간', min: 0.05, max: 3, step: 0.05, kind: 'time' },

@@ -3,27 +3,24 @@ import { BLUE, BYID, CATS, GOLD } from '../data/projects';
 import { onToast } from '../lib/events';
 import { actions, useAppState } from '../state';
 
-/** Where you are on the map, like a path: "HOME", "HOME / MOBILE", then "MOBILE / Wichu" once a star is picked. Earlier parts go back to that level. */
+const Sep = () => <span className="sep" aria-hidden="true">/</span>;
+
+/** Where you are on the map, like a path: STAR MAP / HOME, STAR MAP / MOBILE, STAR MAP / MOBILE / BEONYEOK. Earlier parts go back to that level. */
 export function Crumb() {
   const focus = useAppState(s => s.focus);
   const sel = useAppState(s => s.sel);
   const p = sel ? BYID[sel] : null;
-  const cat = focus ? CATS[focus].label.toUpperCase() : '';
   return (
     <nav className="crumb" aria-label="Map location">
+      {focus ? <button type="button" className="crumb-root" onClick={() => actions.home()}>STAR MAP</button> : <b className="crumb-root">STAR MAP</b>}
+      <Sep />
       {!focus ? <b aria-current="location">HOME</b> : p ? (
         <>
-          <button type="button" onClick={() => actions.showList(focus)}>{cat}</button>
-          <span className="sep">/</span>
-          <b className="crumb-star" aria-current="location">{p.name}</b>
+          <button type="button" onClick={() => actions.showList(focus)}>{CATS[focus].label.toUpperCase()}</button>
+          <Sep />
+          <b aria-current="location">{p.name.toUpperCase()}</b>
         </>
-      ) : (
-        <>
-          <button type="button" onClick={() => actions.home()}>HOME</button>
-          <span className="sep">/</span>
-          <b aria-current="location">{cat}</b>
-        </>
-      )}
+      ) : <b aria-current="location">{CATS[focus].label.toUpperCase()}</b>}
     </nav>
   );
 }

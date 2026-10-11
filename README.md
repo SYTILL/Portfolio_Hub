@@ -1,50 +1,44 @@
-# React + TypeScript + Vite
+# Cosmic Syntax · Portfolio Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Junsang Yoon's portfolio, drawn as a star atlas: every project is a star, every field a constellation.
 
-Currently, two official plugins are available:
+**Live:** https://sytill.github.io/Portfolio_Hub/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Gold stars are shipped projects; blue stars are in progress or experiments.
+- The full map shows only constellation names. Click one (or a project in the list) to open it, draw its lines and label its stars.
+- Panels collapse, and can be dragged between the left and right dock. The layout is remembered in the browser.
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Vite · React 19 · TypeScript · three.js · React Three Fiber 9. No UI framework; styles live in `src/styles/atlas.css`.
 
-- Configure the top-level `parserOptions` property like this:
+## Develop
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm install
+npm run dev      # http://localhost:5173/Portfolio_Hub/  (tuning panel on)
+npm run build    # type-check + production build into dist/
+npm run lint
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Where things are
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+| Path | What |
+|---|---|
+| `src/data/projects.ts` | The projects. Add one entry and its star, label, list row and catalog number follow. |
+| `src/data/profile.ts` | Name, tagline, links. Leave `email` or `resumeUrl` empty to hide that row. |
+| `src/config.ts` | Every animation and look value (`DEFAULTS`), the global speed and the entry timeline. |
+| `src/scene/` | The 3D map: background stars, armillary rings, constellations, camera, labels, meteors. |
+| `src/ui/` | Docks and panels (drag, collapse, FLIP motion), terminal, entry animation. |
+| `src/dev/Tuner.tsx` | Live tuning panel. |
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Tuning
+
+The tuning panel opens in `npm run dev`, or on the live site with `?tune` in the URL
+(https://sytill.github.io/Portfolio_Hub/?tune). Changes apply instantly and are saved in that browser only.
+"Copy values" gives a JSON you can paste into `DEFAULTS` in `src/config.ts` to make it permanent.
+
+## Deploy
+
+Every push to `main` builds and publishes to GitHub Pages through `.github/workflows/deploy.yml`.
+The site is served under `/Portfolio_Hub/` (see `base` in `vite.config.ts`).

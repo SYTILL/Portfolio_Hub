@@ -5,18 +5,19 @@ import { announce } from './announce';
 import { playEntry } from './entry';
 import { paintPanels } from './panelStars';
 
-export const PANEL_KEYS = ['id', 'stats', 'launch', 'proj', 'term'] as const;
+export const PANEL_KEYS = ['id', 'stats', 'launch', 'proj', 'detail', 'term'] as const;
 export type PanelKey = (typeof PANEL_KEYS)[number];
 export const PANELS: Record<PanelKey, { title: string }> = {
   id: { title: 'About' },
   stats: { title: 'Summary' },
   launch: { title: 'Launch Log' },
   proj: { title: 'Projects' },
+  detail: { title: 'Details' },
   term: { title: 'Terminal' },
 };
 
 interface Layout { l: PanelKey[]; r: PanelKey[]; c: PanelKey[] }
-const DEFAULT_LAYOUT: Layout = { l: ['id', 'stats', 'launch'], r: ['proj', 'term'], c: ['term'] };
+const DEFAULT_LAYOUT: Layout = { l: ['id', 'stats', 'launch', 'term'], r: ['proj', 'detail'], c: ['term'] };
 const LAYOUT_KEY = 'cs-atlas-dock-v1';
 
 /**

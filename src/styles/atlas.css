@@ -88,14 +88,23 @@ html,body{margin:0;height:100%;background:#04070f}
 .row .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tag{font-size:13px;font-style:italic;color:var(--blue)}
 .tag.live{color:var(--gold)}
-[data-detail]{display:flex;flex-direction:column;gap:10px}
+.dt-view{display:flex;flex-direction:column;gap:10px;animation:pj-in calc(.22s / var(--spd,1)) ease-out both}
+.dt-intro,.dt-p{margin:0;font-size:15.5px;line-height:1.55}
+.dt-p{color:var(--ink)}
+.dt-intro{color:var(--sub)}
+.dt-hint{margin:2px 0 0;font-size:13.5px;font-style:italic;color:var(--muted)}
+.dt-cons{list-style:none;margin:0 -8px;padding:0;display:grid}
+.dt-cons button{appearance:none;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:2px 10px;padding:7px 8px;cursor:pointer}
+.dt-cons button:hover{background:var(--row-hover)}
+.dt-cons button:focus-visible{outline:1px solid var(--gold);outline-offset:-1px}
+.dt-cons b{font-weight:500;font-size:13.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.dt-cons span{font-size:13px;font-style:italic;color:var(--muted)}
+.dt-cons small{grid-column:1 / -1;font-size:14.5px;line-height:1.45;color:var(--sub)}
 .d-back{appearance:none;align-self:flex-start;border:0;background:transparent;color:var(--gold);font:inherit;font-size:14px;letter-spacing:.06em;padding:4px 8px;margin:-2px 0 0 -8px;cursor:pointer}
 .d-back:hover{background:var(--row-hover);color:var(--gold-hi)}
 .d-back:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
-.d-name:focus{outline:none}
-.pj-view{animation:pj-in calc(.22s / var(--spd,1)) ease-out both}
 @keyframes pj-in{from{opacity:0;transform:translateY(4px)}}
-@media (prefers-reduced-motion:reduce){.pj-view{animation:none}}
+@media (prefers-reduced-motion:reduce){.dt-view{animation:none}}
 .d-kicker{margin:0;display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .d-kicker .no{margin-left:auto;color:var(--gold);font-variant-numeric:lining-nums}
 .d-name{margin:0;font-weight:500;font-size:28px;line-height:1.1}

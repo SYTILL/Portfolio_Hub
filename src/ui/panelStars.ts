@@ -23,7 +23,7 @@ export function starTile(seed: number, W: number) {
   return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${W}'>${parts.join('')}</svg>`)}")`;
 }
 
-const TILES: Record<string, number> = { id: 300, stats: 340, launch: 280, proj: 360, term: 260 };
+const TILES: Record<string, number> = { id: 300, stats: 340, launch: 280, proj: 360, detail: 320, term: 260 };
 
 export function paintPanels(root: HTMLElement) {
   root.querySelectorAll<HTMLElement>('.p[data-panel]').forEach(p => {

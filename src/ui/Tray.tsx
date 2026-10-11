@@ -1,38 +1,10 @@
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 import { getTheme, subscribeTheme, toggleTheme } from '../lib/theme';
 import { Ambience } from './Ambience';
 
-const GAP = 14;
-
-/**
- * Bottom-right corner: the light/dark switch and the ambience player.
- * It stays in the corner, and only slides left (toward the map) while the right dock's panels reach down into it.
- */
+/** Bottom-left corner: the light/dark switch and, a little apart, the ambience player. */
 export function Tray({ root }: { root: HTMLElement }) {
   const theme = useSyncExternalStore(subscribeTheme, getTheme);
-  const box = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = box.current, dock = root.querySelector<HTMLElement>('.dock-r');
-    if (!el || !dock) return;
-    let last = -1;
-    // Panels collapse, move and animate in many ways; a light poll is simpler and cheaper than tracking each one.
-    const check = () => {
-      let right = GAP;
-      if (matchMedia('(min-width: 761px)').matches) {
-        const d = dock.getBoundingClientRect(), t = el.getBoundingClientRect();
-        const top = innerHeight - GAP - t.height - 8;
-        const panels = [...dock.querySelectorAll<HTMLElement>(':scope > .p')];
-        const bottom = Math.min(d.bottom, Math.max(0, ...panels.map(p => p.getBoundingClientRect().bottom)));
-        if (d.width > 0 && bottom > top) right = innerWidth - d.left + 10;
-      }
-      if (right !== last) { last = right; el.style.setProperty('--tray-r', right + 'px'); }
-    };
-    check();
-    const id = window.setInterval(check, 250);
-    addEventListener('resize', check);
-    return () => { clearInterval(id); removeEventListener('resize', check); };
-  }, [root]);
 
   const flip = (e: React.MouseEvent) => {
     // Grow the new theme from the center of the map (the gap between the docks), or from the button if it's hidden.
@@ -42,7 +14,7 @@ export function Tray({ root }: { root: HTMLElement }) {
   };
 
   return (
-    <div className="tray" ref={box}>
+    <div className="tray">
       <button type="button" className="tray-theme" onClick={flip} aria-label={theme === 'dark' ? 'Switch to light edit mode' : 'Switch to dark star chart'} aria-pressed={theme === 'light'}>
         <svg viewBox="0 0 16 16" aria-hidden="true">
           {theme === 'dark'

@@ -46,6 +46,16 @@ export const actions = {
   home() {
     set({ focus: null, sel: null, caseId: null });
   },
+  /** Open a constellation with its project list showing (clears any selected star). */
+  showList(cat: CatKey) {
+    set({ focus: cat, sel: null, hintCat: null });
+  },
+  /** One step up: case file → star → constellation → full map. */
+  back() {
+    if (state.caseId) set({ caseId: null });
+    else if (state.sel) set({ sel: null });
+    else if (state.focus) set({ focus: null, hintCat: null });
+  },
   openCase(id: string) {
     const p = BYID[id];
     if (p?.case) set({ focus: p.cat, sel: p.id, caseId: p.id });

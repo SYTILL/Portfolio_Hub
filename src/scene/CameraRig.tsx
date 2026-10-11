@@ -16,7 +16,7 @@ import { CENTERS, POS } from './util';
  * - Drag rotates; Ctrl/⌘ + wheel (or a trackpad pinch) zooms, so plain scrolling still scrolls.
  * - Follows the app state: full map, an open constellation, or a selected star.
  * - Shifts the projection so the map is centered in the empty area between the docks (focusEl).
- * - Owns pointer input on the map: hover and click on stars and constellation names.
+ * - Owns pointer input on the map: hover and click on stars and constellation names, right-click to go back.
  */
 export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTMLElement | null }) {
   const get = useThree(s => s.get);
@@ -128,6 +128,11 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
       rig.wantR = Math.min(320, Math.max(12, rig.wantR * (e.deltaY > 0 ? 1.08 : 0.92)));
       rig.idle = 0;
     };
+    // Right-click goes one level up (star → constellation → full map), unless it ended a drag.
+    const context = (e: MouseEvent) => {
+      e.preventDefault();
+      if (rig.moved <= 6) actions.back();
+    };
     const click = (e: MouseEvent) => {
       if (rig.moved > 6) return;
       const h = pick(...local(e));
@@ -143,6 +148,7 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
     mapEl.addEventListener('pointerleave', leave);
     mapEl.addEventListener('wheel', wheel, { passive: false });
     mapEl.addEventListener('click', click);
+    mapEl.addEventListener('contextmenu', context);
     return () => {
       mapEl.removeEventListener('pointerdown', down);
       mapEl.removeEventListener('pointermove', move);
@@ -151,6 +157,7 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
       mapEl.removeEventListener('pointerleave', leave);
       mapEl.removeEventListener('wheel', wheel);
       mapEl.removeEventListener('click', click);
+      mapEl.removeEventListener('contextmenu', context);
     };
   }, [rig, mapEl, get]);
 

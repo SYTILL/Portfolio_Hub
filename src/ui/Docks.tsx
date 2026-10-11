@@ -5,18 +5,17 @@ import { About } from './panels/About';
 import { Summary } from './panels/Summary';
 import { LaunchLog } from './panels/LaunchLog';
 import { Projects } from './panels/Projects';
-import { Details } from './panels/Details';
 import { Terminal } from './panels/Terminal';
 
-const BODIES: Record<PanelKey, ComponentType> = { id: About, stats: Summary, launch: LaunchLog, proj: Projects, detail: Details, term: Terminal };
+const BODIES: Record<PanelKey, ComponentType> = { id: About, stats: Summary, launch: LaunchLog, proj: Projects, term: Terminal };
 
 function PanelFrame({ k }: { k: PanelKey }) {
-  const { rn, title } = PANELS[k], Body = BODIES[k];
+  const { title } = PANELS[k], Body = BODIES[k];
   return (
     <>
       <header className="ph">
         <button type="button" className="grip" aria-label={`Move the ${title} panel. Drag it, or use the arrow keys.`} />
-        <h2 className="pt"><span className="pt-rn">{rn}</span><span>{title}</span></h2>
+        <h2 className="pt"><span>{title}</span></h2>
         {/* aria-expanded and aria-label are set by wireDocks when the panel collapses */}
         <button type="button" className="tg" aria-controls={`pb-${k}`} />
       </header>

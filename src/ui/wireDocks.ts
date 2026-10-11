@@ -5,19 +5,18 @@ import { announce } from './announce';
 import { playEntry } from './entry';
 import { paintPanels } from './panelStars';
 
-export const PANEL_KEYS = ['id', 'stats', 'launch', 'proj', 'detail', 'term'] as const;
+export const PANEL_KEYS = ['id', 'stats', 'launch', 'proj', 'term'] as const;
 export type PanelKey = (typeof PANEL_KEYS)[number];
-export const PANELS: Record<PanelKey, { rn: string; title: string }> = {
-  id: { rn: 'I', title: 'About' },
-  stats: { rn: 'II', title: 'Summary' },
-  launch: { rn: 'III', title: 'Launch Log' },
-  proj: { rn: 'IV', title: 'Projects' },
-  detail: { rn: 'V', title: 'Details' },
-  term: { rn: 'VI', title: 'Terminal' },
+export const PANELS: Record<PanelKey, { title: string }> = {
+  id: { title: 'About' },
+  stats: { title: 'Summary' },
+  launch: { title: 'Launch Log' },
+  proj: { title: 'Projects' },
+  term: { title: 'Terminal' },
 };
 
 interface Layout { l: PanelKey[]; r: PanelKey[]; c: PanelKey[] }
-const DEFAULT_LAYOUT: Layout = { l: ['id', 'stats', 'launch'], r: ['proj', 'detail', 'term'], c: ['term'] };
+const DEFAULT_LAYOUT: Layout = { l: ['id', 'stats', 'launch'], r: ['proj', 'term'], c: ['term'] };
 const LAYOUT_KEY = 'cs-atlas-dock-v1';
 
 /**
@@ -60,9 +59,15 @@ export function wireDocks(root: HTMLElement, L: HTMLElement, R: HTMLElement, hos
     storage.set(LAYOUT_KEY, { l: ids(L), r: ids(R), c: [...root.querySelectorAll<HTMLElement>('.p.is-collapsed')].map(keyOf) } satisfies Layout);
     syncEmpty();
   };
+  // A saved layout keeps working when panels are added or removed: unknown keys are dropped, new ones join their default dock.
   const apply = (lay: Layout | null) => {
-    const ok = !!lay && Array.isArray(lay.l) && Array.isArray(lay.r) && [...lay.l, ...lay.r].sort().join() === [...PANEL_KEYS].sort().join();
-    const use = ok ? lay! : DEFAULT_LAYOUT;
+    let use = DEFAULT_LAYOUT;
+    if (lay && Array.isArray(lay.l) && Array.isArray(lay.r)) {
+      const known = (ks: PanelKey[]) => ks.filter(k => (PANEL_KEYS as readonly string[]).includes(k));
+      const l = known(lay.l), r = known(lay.r).filter(k => !l.includes(k)), seen = [...l, ...r];
+      for (const k of PANEL_KEYS) if (!seen.includes(k)) (DEFAULT_LAYOUT.l.includes(k) ? l : r).push(k);
+      use = { l, r, c: known(Array.isArray(lay.c) ? lay.c : []) };
+    }
     use.l.forEach(k => L.appendChild(hosts[k]));
     use.r.forEach(k => R.appendChild(hosts[k]));
     PANEL_KEYS.forEach(k => setCollapsed(hosts[k], (use.c || []).includes(k)));

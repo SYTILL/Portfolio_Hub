@@ -1,0 +1,21 @@
+/* Tuning panel: a plain sans-serif dev tool floating over the right edge. */
+.tn,.tn-toggle{font:13px/1.45 system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#e6eaf2;color-scheme:dark}
+.tn{position:fixed;top:12px;right:12px;bottom:12px;z-index:80;width:320px;max-width:calc(100% - 24px);overflow:auto;background:#121826f2;border:1px solid #2a3346;border-radius:12px;padding:12px 14px;box-shadow:0 20px 50px -20px #000}
+.tn-toggle{position:fixed;right:12px;bottom:12px;z-index:80;border:1px solid #2a3346;background:#121826;border-radius:10px;padding:8px 12px;cursor:pointer}
+.tn-head{display:flex;align-items:center;justify-content:space-between}
+.tn h2{margin:0;font-size:15px}
+.tn-desc{margin:6px 0 0;color:#98a2b5;font-size:12px}
+.tn-actions{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.tn-btn{appearance:none;border:1px solid #2a3346;background:#1a2130;color:inherit;font:inherit;font-size:12px;border-radius:8px;padding:6px 9px;cursor:pointer}
+.tn-btn.primary{background:#86aaff;color:#0b0e15;border-color:#86aaff}
+.tn-btn:focus-visible,.tn summary:focus-visible,.tn input:focus-visible{outline:2px solid #86aaff;outline-offset:1px}
+.tn-grp{border-top:1px solid #2a3346;padding-top:6px;margin-top:6px}
+.tn summary{cursor:pointer;font-weight:600;padding:4px 0}
+.tn-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;align-items:baseline;padding:5px 0}
+.tn-row.changed label::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#86aaff;margin-left:6px;vertical-align:2px}
+.tn-real{font:11px ui-monospace,Consolas,monospace;color:#98a2b5;white-space:nowrap}
+.tn-ctl{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1fr) 72px;gap:8px;align-items:center}
+.tn-ctl input[type=range]{width:100%;accent-color:#86aaff;margin:0}
+.tn-ctl input[type=number]{width:100%;font:12px ui-monospace,Consolas,monospace;padding:4px 6px;border:1px solid #2a3346;border-radius:6px;background:#0b0e15;color:inherit}
+.tn-note{grid-column:1 / -1;margin:0;font-size:11px;color:#98a2b5}
+.tn-json{width:100%;margin-top:6px;font:11px/1.5 ui-monospace,Consolas,monospace;border:1px solid #2a3346;border-radius:6px;background:#0b0e15;color:inherit;padding:8px}

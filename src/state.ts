@@ -1,0 +1,53 @@
+import { useSyncExternalStore } from 'react';
+import { BYID, type CatKey } from './data/projects';
+
+// Which constellation is open, which project is selected, what the pointer is over.
+// The 3D scene reads this every frame through getState(); React components subscribe with useAppState().
+interface AppState {
+  focus: CatKey | null;
+  sel: string | null;
+  hover: string | null;
+  hintCat: CatKey | null;
+}
+
+let state: AppState = { focus: null, sel: null, hover: null, hintCat: null };
+const subs = new Set<() => void>();
+
+export const getState = () => state;
+const set = (patch: Partial<AppState>) => {
+  const next = { ...state, ...patch };
+  if ((Object.keys(patch) as (keyof AppState)[]).every(k => next[k] === state[k])) return;
+  state = next;
+  subs.forEach(fn => fn());
+};
+export const subscribe = (fn: () => void) => {
+  subs.add(fn);
+  return () => { subs.delete(fn); };
+};
+export function useAppState<T>(pick: (s: AppState) => T): T {
+  return useSyncExternalStore(subscribe, () => pick(state));
+}
+
+// On the full map stars don't react; hovering a project only lights its constellation name.
+// Inside an open constellation the hovered (or else the selected) star is highlighted.
+export const hotId = (s: AppState = state) => (s.focus && s.hover && BYID[s.hover]?.cat === s.focus ? s.hover : s.sel);
+
+export const actions = {
+  setFocus(cat: CatKey | null) {
+    const sel = state.sel && BYID[state.sel].cat === cat ? state.sel : null;
+    set({ focus: cat, sel, hintCat: null });
+  },
+  select(id: string) {
+    const p = BYID[id];
+    if (p) set({ focus: p.cat, sel: p.id });
+  },
+  home() {
+    set({ focus: null, sel: null });
+  },
+  hover(id: string | null) {
+    set({ hover: id, hintCat: id && BYID[id].cat !== state.focus ? BYID[id].cat : null });
+  },
+  hintName(cat: CatKey | null) {
+    set({ hintCat: cat });
+  },
+};

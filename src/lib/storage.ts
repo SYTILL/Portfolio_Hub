@@ -1,0 +1,27 @@
+// localStorage that never throws (private windows, blocked storage).
+export const storage = {
+  get<T>(key: string): T | null {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? (JSON.parse(raw) as T) : null;
+    } catch {
+      return null;
+    }
+  },
+  set(key: string, value: unknown) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      /* storage unavailable */
+    }
+  },
+  remove(key: string) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      /* storage unavailable */
+    }
+  },
+};
+
+export const REDUCED_MOTION = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;

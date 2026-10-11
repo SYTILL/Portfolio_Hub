@@ -3,16 +3,16 @@ import { storage } from './storage';
 // Background ambience, looped without a seam: two <audio> voices take turns, and each loop
 // crossfades (equal power) into a fresh start of the track over the last XF seconds.
 // Nothing downloads until the first start. Browsers only allow sound after a user gesture,
-// so the first click or key press anywhere starts it, unless the visitor turned it off before.
+// so the first click or key press of every visit starts it. Only the volume is remembered.
 
 const SRC = `${import.meta.env.BASE_URL}audio/space-ambience.mp3`;
 const KEY = 'cs-ambience';
 const XF = 4;
 const FADE_IN = 5, FADE_OUT = 0.6;
 
-interface Prefs { on: boolean; vol: number }
+interface Prefs { vol: number }
 const saved = storage.get<Prefs>(KEY);
-const prefs: Prefs = { on: saved?.on ?? true, vol: typeof saved?.vol === 'number' ? saved.vol : 0.25 };
+const prefs: Prefs = { vol: typeof saved?.vol === 'number' ? saved.vol : 0.25 };
 
 export interface AmbienceState { playing: boolean; vol: number }
 let snap: AmbienceState = { playing: false, vol: prefs.vol };
@@ -98,8 +98,6 @@ function stop() {
 export function toggleAmbience() {
   if (snap.playing) stop();
   else start();
-  prefs.on = snap.playing;
-  storage.set(KEY, prefs);
 }
 
 export function setAmbienceVolume(vol: number) {
@@ -109,9 +107,8 @@ export function setAmbienceVolume(vol: number) {
   if (snap.playing && master) glide(master.gain, vol, 0.08);
 }
 
-/** Start on the first user gesture (not one aimed at the player itself), if the visitor hasn't turned it off. */
+/** Start on the first user gesture of the visit (not one aimed at the player itself). */
 export function armAmbience(player: () => Element | null) {
-  if (!prefs.on) return () => {};
   const go = (e: Event) => {
     off();
     if (player()?.contains(e.target as Node)) return;

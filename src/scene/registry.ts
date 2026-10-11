@@ -16,6 +16,13 @@ export interface Sky {
 }
 export const sky: { current: Sky | null } = { current: null };
 
+/** Armillary rings this frame, for the edit-mode readouts: where each orbiting star is, and the ring's numbers. */
+export interface RingInfo { pos: THREE.Vector3; R: number; omega: number; tilt: number; visible: boolean }
+export const rings: RingInfo[] = [];
+
+/** Numbers as shown in edit mode: one decimal, a real minus sign. */
+export const num = (v: number, digits = 1) => (Math.abs(v) < 0.05 && digits === 1 ? 0 : v).toFixed(digits).replace('-', '−');
+
 export type Box = [x0: number, y0: number, x1: number, y1: number];
 /** Screen boxes of the constellation names this frame, for picking. */
 export const nameBoxes: { k: CatKey; box: Box }[] = [];

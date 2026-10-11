@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { CFG, T, clamp01 } from '../config';
 import { REDUCED_MOTION as RM } from '../lib/storage';
 import { clock, since } from './clock';
+import { rings as ringInfo } from './registry';
 import { disposeTree, lineMat, sprite } from './util';
 
 // Armillary sphere: three gold rings with degree ticks, each turning at its own speed with one star orbiting on it.
@@ -65,6 +66,10 @@ export function Armillary() {
       r.bead.material.opacity = 0.95 * (RM ? 1 : clamp01((since() - starts[i] - T.ringDur * 0.7) / 0.5));
       const a = r.def.orbit.phase + (RM ? 1 : t * r.def.orbit.speed);
       r.bead.position.set(Math.cos(a) * r.def.R, 0, Math.sin(a) * r.def.R);
+      const info = (ringInfo[i] ??= { pos: new THREE.Vector3(), R: r.def.R, omega: 0, tilt: (r.def.tilt[0] * 180) / Math.PI, visible: false });
+      r.bead.getWorldPosition(info.pos);
+      info.omega = r.def.orbit.speed * CFG.speed;
+      info.visible = r.holder.visible && r.bead.material.opacity > 0.5;
     });
     built.mats.forEach(([m, base]) => { m.opacity = base * CFG.ringAlpha; });
   });

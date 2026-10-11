@@ -4,10 +4,11 @@ import * as THREE from 'three';
 import { CFG } from '../config';
 import { BYID, CATS, CAT_KEYS, PROJECTS, type CatKey } from '../data/projects';
 import { REDUCED_MOTION as RM } from '../lib/storage';
+import { getTheme } from '../lib/theme';
 import { actions, getState } from '../state';
 import { clock } from './clock';
-import { nameBoxes, sky, toScreen, type Box, type StarData } from './registry';
-import { CENTERS } from './util';
+import { nameBoxes, num, rings, sky, toScreen, type Box, type StarData } from './registry';
+import { CENTERS, POS } from './util';
 
 // HTML labels over the canvas.
 // Constellation names sit at each cluster center; the open one becomes a blurred watermark and stops blocking star labels.
@@ -17,24 +18,29 @@ import { CENTERS } from './util';
 // (mirrored to the left near the right edge). It lives beside the aria-hidden label layer so it can be clicked and focused.
 const IDX: Record<string, number> = Object.fromEntries(PROJECTS.map((p, i) => [p.id, i]));
 const DIAG = 50, RUN = 16;
+// Edit mode (light theme) adds numbers: each constellation's center, each star's x/y/z under its name, and a tag on
+// every ring's orbiting star with its radius, angular speed and tilt. They are in the DOM all the time and shown by CSS.
+const xyz = (v: { x: number; y: number; z: number }) => `<span class="xyz"><i class="ax">${num(v.x)}</i><i class="ay">${num(v.y)}</i><i class="az">${num(v.z)}</i></span>`;
 type Callout = { d: HTMLDivElement; btn: HTMLButtonElement; w: number; id: string | null; on: boolean; flip: boolean };
 export function Labels({ layer }: { layer: HTMLDivElement }) {
   const { camera, size } = useThree();
-  const nodes = useRef<{ names: { k: CatKey; d: HTMLDivElement; w: number; h: number; life: number }[]; items: { id: string; d: HTMLDivElement; w: number; x: number; y: number; ok: boolean }[]; call: Callout } | null>(null);
+  const nodes = useRef<{ names: { k: CatKey; d: HTMLDivElement; w: number; h: number; life: number }[]; items: { id: string; d: HTMLDivElement; w: number; x: number; y: number; ok: boolean }[]; call: Callout; ringTags: HTMLDivElement[] } | null>(null);
 
   useEffect(() => {
     const names = CAT_KEYS.map(k => {
       const d = document.createElement('div');
       d.className = 'cname';
       const count = PROJECTS.filter(p => p.cat === k).length;
-      d.innerHTML = `<b>${CATS[k].label.toUpperCase()}</b><small>${count} ${CATS[k].unit}</small>`;
+      const [cx, cy, cz] = CENTERS[k];
+      d.innerHTML = `<b>${CATS[k].label.toUpperCase()}</b><small>${count} ${CATS[k].unit}</small><em class="cxyz">(${num(cx, 0)}, ${num(cy, 0)}, ${num(cz, 0)})</em>`;
       layer.appendChild(d);
       return { k, d, w: 0, h: 0, life: -1 };
     });
     const items = PROJECTS.map(p => {
       const d = document.createElement('div');
       d.className = 'lbl';
-      d.textContent = p.name;
+      d.innerHTML = `<span class="lbl-n"></span>${xyz(POS[p.id])}`;
+      d.firstElementChild!.textContent = p.name;
       layer.appendChild(d);
       return { id: p.id, d, w: 0, x: 0, y: 0, ok: false };
     });
@@ -51,7 +57,13 @@ export function Labels({ layer }: { layer: HTMLDivElement }) {
     btn.addEventListener('click', e => { e.stopPropagation(); const id = getState().sel; if (id) actions.openCase(id); });
     layer.after(cd);
     const call: Callout = { d: cd, btn, w: 0, id: null, on: false, flip: false };
-    nodes.current = { names, items, call };
+    const ringTags = [0, 1, 2].map(() => {
+      const t = document.createElement('div');
+      t.className = 'ring-tag';
+      layer.appendChild(t);
+      return t;
+    });
+    nodes.current = { names, items, call, ringTags };
     // Widths change once the web font arrives.
     let alive = true;
     document.fonts?.ready.then(() => { if (alive) { names.forEach(n => { n.w = 0; }); items.forEach(i => { i.w = 0; }); call.w = 0; } });
@@ -60,13 +72,21 @@ export function Labels({ layer }: { layer: HTMLDivElement }) {
       names.forEach(n => n.d.remove());
       items.forEach(i => i.d.remove());
       cd.remove();
+      ringTags.forEach(t => t.remove());
       nodes.current = null;
     };
   }, [layer]);
 
+  const mode = useRef(getTheme());
   useFrame(() => {
     const c = sky.current, n = nodes.current;
     if (!c || !n) return;
+    // Edit mode changes what the labels contain, so measure them again.
+    if (mode.current !== getTheme()) {
+      mode.current = getTheme();
+      n.names.forEach(nm => { nm.w = 0; });
+      n.items.forEach(it => { it.w = 0; });
+    }
     const placed: Box[] = [];
     nameBoxes.length = 0;
     for (const nm of n.names) {
@@ -84,6 +104,16 @@ export function Labels({ layer }: { layer: HTMLDivElement }) {
       nm.d.classList.toggle('is-other', !!c.focus && c.focus !== nm.k);
       nm.d.classList.toggle('is-hint', c.hintCat === nm.k && c.focus !== nm.k);
     }
+
+    const edit = getTheme() === 'light';
+    n.ringTags.forEach((tag, i) => {
+      const r = rings[i];
+      const p = r && edit && r.visible ? toScreen(camera, size, r.pos) : null;
+      if (!p || p.behind) { tag.style.transform = 'translate(-9999px,0)'; return; }
+      const text = `ring ${i + 1} · r ${r.R} · ω ${num(r.omega, 3)} rad/s · tilt ${num(r.tilt)}°`;
+      if (tag.textContent !== text) tag.textContent = text;
+      tag.style.transform = `translate(${(p.x + 10).toFixed(1)}px,${(p.y - 18).toFixed(1)}px)`;
+    });
 
     const labelsReady = RM || clock.now - c.focusAt >= CFG.labelDelay;
     const world = new THREE.Vector3();
@@ -129,8 +159,9 @@ export function Labels({ layer }: { layer: HTMLDivElement }) {
       .forEach(({ it, u }) => {
         let x0 = it.x;
         if (it.ok) {
-          const right: Box = [it.x + 10, it.y - 9, it.x + it.w + 2, it.y + 9];
-          const left: Box = [it.x - it.w + 2, it.y - 9, it.x - 6, it.y + 9];
+          const lo = edit ? 22 : 9;
+          const right: Box = [it.x + 10, it.y - 9, it.x + it.w + 2, it.y + lo];
+          const left: Box = [it.x - it.w + 2, it.y - 9, it.x - 6, it.y + lo];
           if (!hits(right)) placed.push(right);
           else if (!hits(left)) { placed.push(left); x0 = it.x - it.w - 8; }
           else it.ok = u.kT > 0;

@@ -254,3 +254,17 @@ html[data-theme="light"] .cs :is(img,iframe){filter:invert(1) hue-rotate(180deg)
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 .dock *{scrollbar-width:none}
 .dock::-webkit-scrollbar,.dock ::-webkit-scrollbar{display:none}
+
+/* Edit-mode numbers (light theme only). Axis colors are given in their pre-inversion form, like the 3D axes. */
+.cs{--ax:#ff8a8a;--ay:#8fe39a;--az:#8fb0ff}
+.xyz,.cxyz,.ring-tag,.cam-hud{display:none;font-variant-numeric:lining-nums tabular-nums}
+html[data-theme="light"] .xyz{display:flex;gap:7px;margin-top:4px;font-size:11.5px;font-weight:400}
+html[data-theme="light"] .cxyz{display:block;margin-top:5px;font-size:12px;font-style:normal;letter-spacing:.04em;color:rgba(241,234,217,.6)}
+.xyz i,.cam-hud i{font-style:normal}
+.ax{color:var(--ax)}.ay{color:var(--ay)}.az{color:var(--az)}
+html[data-theme="light"] .ring-tag{display:block;position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;letter-spacing:.02em;color:var(--sub);text-shadow:0 0 4px #000;transform:translate(-9999px,0)}
+.cs-focus{position:relative}
+html[data-theme="light"] .cam-hud{display:block;position:absolute;left:8px;top:4px;font-size:12px;line-height:1.6;color:var(--muted);pointer-events:none;white-space:nowrap}
+.cam-hud b{font-weight:500;color:var(--sub);letter-spacing:.06em}
+.colophon{margin:0;font-size:12px;letter-spacing:.04em;color:var(--muted);text-align:center;opacity:.8}
+@media (max-width:760px){.colophon{order:1;padding:4px 0 16px}}

@@ -3,12 +3,14 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { REDUCED_MOTION as RM } from '../lib/storage';
 import { getTheme } from '../lib/theme';
+import { getState } from '../state';
 import { clock } from './clock';
-import { disposeTree } from './util';
+import { POS, disposeTree } from './util';
 
 // Light ("edit mode") only: an XZ ground grid and X/Y/Z axes through the origin, like a 3D editor viewport.
 // The page is color-inverted in light mode, so everything here is drawn in its dark-mode (light) colors
 // and comes out as dark lines on the light page. Fades in and out with the theme.
+// A selected star also gets a dashed drop line to the grid and a small marker where it lands, to show its height.
 const SIZE = 120, DIV = 24, AXIS = 64;
 const AXES = [
   { dir: [1, 0, 0], color: '#ff7b7b', label: 'X' },
@@ -54,8 +56,15 @@ export function EditGrid() {
       fade.push([tag.material, 0.95]);
       root.add(tag);
     }
+    const dropGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+    const dropMat = new THREE.LineDashedMaterial({ color: '#86e08a', dashSize: 0.8, gapSize: 0.6, transparent: true, depthWrite: false, opacity: 0 });
+    const drop = new THREE.Line(dropGeo, dropMat);
+    drop.frustumCulled = false; // its points move, so the bounds computed at the origin would hide it
+    const foot = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.95, 32), new THREE.MeshBasicMaterial({ color: '#86e08a', transparent: true, depthWrite: false, side: THREE.DoubleSide, opacity: 0 }));
+    foot.rotation.x = -Math.PI / 2;
+    root.add(drop, foot);
     root.visible = false;
-    return { root, fade, k: getTheme() === 'light' ? 1 : 0 };
+    return { root, fade, k: getTheme() === 'light' ? 1 : 0, drop, dropGeo, dropMat, foot, sel: '' };
   }, []);
 
   useEffect(() => () => disposeTree(built.root), [built]);
@@ -66,6 +75,20 @@ export function EditGrid() {
     if (Math.abs(built.k - want) < 0.002) built.k = want;
     built.root.visible = built.k > 0;
     for (const [m, a] of built.fade) m.opacity = a * built.k;
+
+    const sel = getState().sel ?? '', p = sel ? POS[sel] : null;
+    if (sel !== built.sel && p) {
+      const pos = built.dropGeo.attributes.position as THREE.BufferAttribute;
+      pos.setXYZ(0, p.x, p.y, p.z);
+      pos.setXYZ(1, p.x, 0, p.z);
+      pos.needsUpdate = true;
+      built.drop.computeLineDistances();
+      built.foot.position.set(p.x, 0, p.z);
+    }
+    built.sel = sel;
+    const a = p ? 0.9 * built.k : 0;
+    built.dropMat.opacity = a;
+    (built.foot.material as THREE.MeshBasicMaterial).opacity = a;
   });
 
   return <primitive object={built.root} />;

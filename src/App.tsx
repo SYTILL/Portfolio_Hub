@@ -52,6 +52,7 @@ export default function App() {
           <Crumb />
           <div className="cs-focus" ref={setFocus} />
           <Hint />
+          <p className="colophon">© 2026 Cosmic Syntax by Junsang Yoon</p>
         </div>
         <div className="dock dock-r" ref={setRight} aria-label="Right dock" />
       </div>

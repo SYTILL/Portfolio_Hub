@@ -5,9 +5,10 @@ import { CFG, clamp01, onRetune } from '../config';
 import { BYID, type CatKey } from '../data/projects';
 import { on } from '../lib/events';
 import { REDUCED_MOTION as RM } from '../lib/storage';
+import { getTheme } from '../lib/theme';
 import { actions, getState, subscribe } from '../state';
 import { clock, since } from './clock';
-import { nameBoxes, sky, toScreen, type StarData } from './registry';
+import { nameBoxes, num, sky, toScreen, type StarData } from './registry';
 import { CENTERS, POS } from './util';
 
 /**
@@ -16,6 +17,7 @@ import { CENTERS, POS } from './util';
  * - Drag rotates; Ctrl/⌘ + wheel (or a trackpad pinch) zooms, so plain scrolling still scrolls.
  * - Follows the app state: full map, an open constellation, or a selected star.
  * - Shifts the projection so the map is centered in the empty area between the docks (focusEl).
+ * - In edit mode (light theme), shows its own numbers in a small readout at the top-left of the map area.
  * - Owns pointer input on the map: hover and click on stars and constellation names, right-click to go back.
  */
 export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTMLElement | null }) {
@@ -55,6 +57,18 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
     });
     return () => { offState(); offTune(); offReplay(); };
   }, [rig]);
+
+  // Edit-mode camera readout, refreshed a few times a second.
+  const hud = useMemo(() => ({ el: null as HTMLDivElement | null, last: 0 }), []);
+  useEffect(() => {
+    if (!focusEl) return;
+    const el = document.createElement('div');
+    el.className = 'cam-hud';
+    el.setAttribute('aria-hidden', 'true');
+    focusEl.appendChild(el);
+    hud.el = el;
+    return () => { el.remove(); hud.el = null; };
+  }, [hud, focusEl]);
 
   // Center the map in the gap between the docks.
   useEffect(() => {
@@ -190,6 +204,15 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
     cam.position.set(rig.tgt.x + rig.R * s * Math.sin(rig.th), rig.tgt.y + rig.R * Math.cos(rig.ph), rig.tgt.z + rig.R * s * Math.cos(rig.th));
     cam.lookAt(rig.tgt);
     cam.updateMatrixWorld();
+
+    if (hud.el && getTheme() === 'light' && performance.now() - hud.last > 120) {
+      hud.last = performance.now();
+      const deg = (r: number) => num(((r * 180) / Math.PI) % 360);
+      const t = rig.tgt, p = cam.position;
+      hud.el.innerHTML = `<b>camera</b> r ${num(rig.R)} · θ ${deg(rig.th)}° · φ ${deg(rig.ph)}° · fov ${cam.fov}°`
+        + `<br><b>pos</b> <i class="ax">${num(p.x)}</i> <i class="ay">${num(p.y)}</i> <i class="az">${num(p.z)}</i>`
+        + ` · <b>target</b> <i class="ax">${num(t.x)}</i> <i class="ay">${num(t.y)}</i> <i class="az">${num(t.z)}</i>`;
+    }
   }, -50);
 
   return null;

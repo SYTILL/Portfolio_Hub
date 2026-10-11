@@ -25,5 +25,5 @@ export function playEntry(root: HTMLElement) {
     );
   });
   root.querySelector('.crumb')?.animate([{ opacity: 0, transform: 'translateY(-14px)' }, { opacity: 1, transform: 'none' }], { duration: MS(600), delay: MS(T.crumb * 1000), easing: EASE, fill: 'backwards' });
-  root.querySelector('.hint')?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: MS(900), delay: MS(T.hint * 1000), fill: 'backwards' });
+  root.querySelectorAll('.hint, .colophon').forEach(el => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: MS(900), delay: MS(T.hint * 1000), fill: 'backwards' }));
 }

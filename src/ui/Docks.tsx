@@ -3,12 +3,11 @@ import { createPortal } from 'react-dom';
 import { PANELS, PANEL_KEYS, wireDocks, type PanelKey } from './wireDocks';
 import { About } from './panels/About';
 import { Summary } from './panels/Summary';
-import { LaunchLog } from './panels/LaunchLog';
 import { Projects } from './panels/Projects';
 import { Details } from './panels/Details';
 import { Terminal } from './panels/Terminal';
 
-const BODIES: Record<PanelKey, ComponentType> = { id: About, stats: Summary, launch: LaunchLog, proj: Projects, detail: Details, term: Terminal };
+const BODIES: Record<PanelKey, ComponentType> = { id: About, stats: Summary, proj: Projects, detail: Details, term: Terminal };
 
 function PanelFrame({ k }: { k: PanelKey }) {
   const { title } = PANELS[k], Body = BODIES[k];

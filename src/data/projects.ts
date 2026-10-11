@@ -101,7 +101,6 @@ export const CATNO: Record<string, string> = Object.fromEntries([...catalog(WORK
 export const FIRST_YEAR = '2026';
 export const SINCE = APPS.filter(p => p.start >= `${FIRST_YEAR}-01`);
 export const SHIPPED = APPS.filter(p => p.status === 'live');
-export const MONTHS = ['2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10'];
 export const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const ym = (s: string) => `${MON[+s.slice(5) - 1]} ${s.slice(0, 4)}`;
 export const TAG: Record<Status, string> = { live: 'Shipped', wip: 'In progress', proto: 'Prototype', lab: 'Lab' };

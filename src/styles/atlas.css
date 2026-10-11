@@ -66,13 +66,6 @@ html,body{margin:0;height:100%;background:#04070f}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 14px}
 .stat b{display:block;font-weight:500;font-size:38px;line-height:.9;color:var(--gold);font-variant-numeric:oldstyle-nums}
 .stat span{display:block;margin-top:7px;font-size:13.5px;color:var(--muted);line-height:1.4}
-.hist{width:100%;height:auto;display:block}
-.hist text{font:12px var(--f)}
-.hist .bar{fill:var(--gold);fill-opacity:.7}
-.hist .v{fill:var(--ink)}
-.hist .m{fill:var(--muted)}
-.hist .base{stroke:var(--line)}
-.cap{margin:0;font-size:13.5px;font-style:italic;color:var(--muted);line-height:1.5}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{appearance:none;border:1px solid var(--line-soft);background:rgba(13,21,40,.6);color:var(--sub);font:inherit;font-size:14px;letter-spacing:.04em;padding:5px 11px;cursor:pointer;min-height:32px}
 .chip:hover{color:var(--ink);border-color:var(--line)}
@@ -226,6 +219,10 @@ html,body{margin:0;height:100%;background:#04070f}
 .dock-l{margin-bottom:44px}
 .tray-theme{appearance:none;display:grid;place-items:center;width:32px;background:transparent;color:var(--gold);cursor:pointer}
 .tray-theme:hover{background:var(--row-hover);color:var(--gold-hi)}
+.tray-try{position:absolute;left:8px;bottom:calc(100% + 3px);display:flex;align-items:flex-start;gap:1px;white-space:nowrap;font-size:15px;line-height:1;font-style:italic;letter-spacing:.02em;color:var(--gold-hi);text-shadow:0 0 6px #000;pointer-events:none;animation:try-in calc(.6s / var(--spd,1)) ease-out both,try-bob 2.4s ease-in-out infinite;animation-delay:inherit}
+.tray-try svg{flex:none;width:30px;height:24px;fill:none;stroke:var(--gold);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+@keyframes try-in{from{opacity:0;translate:0 6px}}
+@keyframes try-bob{50%{translate:0 -3px}}
 .tray-theme:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
 .tray-theme svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
 .amb{white-space:nowrap;display:flex;align-items:center;color:var(--sub);font-size:13px}
@@ -247,7 +244,7 @@ html,body{margin:0;height:100%;background:#04070f}
 .sc-player{display:block;width:100%;height:170px;border:1px solid var(--line-soft);background:#0a1120}
 @media (hover:none){.amb-vol{display:none}}
 @media (max-width:760px){.amb-t{display:none}.amb-btn{padding:8px 10px}.tray{position:absolute;top:312px;bottom:auto;left:10px}.dock-l{margin-bottom:0}}
-@media (prefers-reduced-motion:reduce){.amb.on .amb-bars i{animation:none;transform:scaleY(.7)}.amb-vol{transition:none}}
+@media (prefers-reduced-motion:reduce){.tray-try{animation:none}.amb.on .amb-bars i{animation:none;transform:scaleY(.7)}.amb-vol{transition:none}}
 
 /* Light = edit mode: the whole page inverted (hue kept), photos and embeds turned back to their real colors.
    The theme switch reveals the new look as a growing circle (view transition, clip-path set from script). */

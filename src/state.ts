@@ -8,9 +8,11 @@ interface AppState {
   sel: string | null;
   hover: string | null;
   hintCat: CatKey | null;
+  /** Project whose case file is open, if any. Mirrored in the URL hash (#nodt). */
+  caseId: string | null;
 }
 
-let state: AppState = { focus: null, sel: null, hover: null, hintCat: null };
+let state: AppState = { focus: null, sel: null, hover: null, hintCat: null, caseId: null };
 const subs = new Set<() => void>();
 
 export const getState = () => state;
@@ -42,7 +44,14 @@ export const actions = {
     if (p) set({ focus: p.cat, sel: p.id });
   },
   home() {
-    set({ focus: null, sel: null });
+    set({ focus: null, sel: null, caseId: null });
+  },
+  openCase(id: string) {
+    const p = BYID[id];
+    if (p?.case) set({ focus: p.cat, sel: p.id, caseId: p.id });
+  },
+  closeCase() {
+    set({ caseId: null });
   },
   hover(id: string | null) {
     set({ hover: id, hintCat: id && BYID[id].cat !== state.focus ? BYID[id].cat : null });

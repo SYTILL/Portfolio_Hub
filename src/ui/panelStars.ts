@@ -2,7 +2,7 @@ import { CFG } from '../config';
 import { hash, rng } from '../scene/util';
 
 // Each panel gets its own sprinkle of tiny stars under the grid lines: a different seed, tile size and density.
-function starTile(seed: number, W: number) {
+export function starTile(seed: number, W: number) {
   const r = rng(seed), parts: string[] = [], bright: [number, number][] = [];
   const count = Math.round((W * W) / 2300 * CFG.panelStarDensity) + Math.floor(r() * 10);
   for (let i = 0; i < count; i++) {

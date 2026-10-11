@@ -1,3 +1,5 @@
+import { CASES } from './cases';
+
 export type CatKey = 'mobile' | 'desktop' | 'web' | 'lab';
 export type Status = 'live' | 'wip' | 'proto' | 'lab';
 
@@ -13,6 +15,19 @@ export interface Project {
   stack: string[];
   points?: string[];
   links?: [label: string, url: string][];
+  /** The long write-up shown in the case file. */
+  case?: CaseFile;
+}
+
+export interface Shot { file: string; alt: string; kind: 'phone' | 'poster' | 'window' }
+export interface CaseFile {
+  role: string;
+  period: string;
+  why: string;
+  built: string[];
+  hard: { title: string; body: string }[];
+  result: string[];
+  shots: Shot[];
 }
 
 export const CATS: Record<CatKey, { label: string }> = {
@@ -37,7 +52,7 @@ export const PROJECTS: Project[] = [
     one: 'A minimal notes app where each thought opens into the next', stack: ['Tauri 2', 'React', 'TypeScript', 'Tiptap'],
     points: ['Notes nest endlessly and are saved as Markdown files', 'v0.1 in three days and 19 commits', 'Wired up Lemon Squeezy checkout, then switched to a free release'],
     links: [['Website', 'https://bangusukdev.com/nodt']] },
-  { id: 'fsr', name: 'FastScreenRecorder', cat: 'desktop', start: '2026-10', status: 'live', statusText: 'Released for Windows',
+  { id: 'fsr', name: 'FastScreenRecorder', cat: 'desktop', start: '2026-10', status: 'wip', statusText: 'v1.0.0 built · release coming soon',
     one: 'A tiny bar that starts recording the moment you press it', stack: ['C#', '.NET', 'FFmpeg'],
     points: ['60 fps hardware encoding on NVIDIA, Intel and AMD GPUs', 'Global F9 hotkey to start and stop from anywhere', 'Paused segments are joined losslessly into one MP4'],
     links: [['Website', 'https://bangusukdev.com/fastscreenrecorder']] },
@@ -64,6 +79,8 @@ export const PROJECTS: Project[] = [
   { id: 'chart', name: 'Chart Pattern Bot', cat: 'lab', start: '2026-03', status: 'lab', statusText: 'Lab', one: 'Detects order blocks, fair value gaps and trendlines, with backtests', stack: ['Python'] },
   { id: 'oxroot', name: '0xRoot', cat: 'lab', start: '2026-04', status: 'lab', statusText: 'Lab', one: 'An L-system tree generator with CRT, pixel and paper render styles', stack: ['JavaScript', 'Canvas'] },
 ];
+
+for (const p of PROJECTS) if (CASES[p.id]) p.case = CASES[p.id];
 
 export const BYID: Record<string, Project> = Object.fromEntries(PROJECTS.map(p => [p.id, p]));
 export const byStart = (a: Project, b: Project) => (a.start < b.start ? -1 : a.start > b.start ? 1 : a.id < b.id ? -1 : 1);

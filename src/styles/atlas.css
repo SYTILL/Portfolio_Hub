@@ -15,7 +15,7 @@ html,body{margin:0;height:100%;background:#04070f}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:#0d1528;color:var(--ink);border:var(--p-border);box-shadow:var(--p-shadow);padding:9px 16px;font-size:15px;font-style:italic;max-width:calc(100% - 32px);text-align:center}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* Star-chart panels: gold grid lines on top, then each panel's own sprinkle of tiny stars (--p-stars, --p-tile set per element from script), then the navy ground. */
-.p,.crumb{--p-bg:linear-gradient(rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,linear-gradient(90deg,rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,var(--p-stars,none) 0 0/var(--p-tile,320px) var(--p-tile,320px),linear-gradient(180deg,#14203a,#0d1528)}
+.p,.crumb,.case{--p-bg:linear-gradient(rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,linear-gradient(90deg,rgba(216,189,126,var(--grid-a,.06)) 1px,transparent 1px) 0 0/20px 20px,var(--p-stars,none) 0 0/var(--p-tile,320px) var(--p-tile,320px),linear-gradient(180deg,#14203a,#0d1528)}
 .cs-map{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none}
 .cs-map:active{cursor:grabbing}
 .cs-ui{--lw:300px;--rw:300px;position:absolute;inset:0;display:grid;grid-template-columns:var(--lw) minmax(0,1fr) var(--rw);gap:12px;padding:12px;pointer-events:none;transition:grid-template-columns calc(.35s / var(--spd,1)) cubic-bezier(.2,.8,.2,1)}
@@ -142,3 +142,52 @@ html,body{margin:0;height:100%;background:#04070f}
   .ph{padding-left:10px}
   .rows{max-height:340px}
 }
+
+/* Case file: a wide sheet over a blurred map, opened from the Details panel or a #project hash. */
+.d-case{appearance:none;align-self:flex-start;border:1px solid var(--line);background:rgba(216,189,126,.08);color:var(--gold-hi);font:inherit;font-size:15px;letter-spacing:.06em;padding:7px 14px;cursor:pointer;transition:background calc(.2s / var(--spd,1)),border-color calc(.2s / var(--spd,1))}
+.d-case:hover{background:rgba(216,189,126,.16);border-color:var(--gold)}
+.d-case span{margin-left:4px;color:var(--gold)}
+.case-scrim{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:28px 16px;background:rgba(4,7,15,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:case-fade calc(.25s / var(--spd,1)) ease both}
+@keyframes case-fade{from{opacity:0}}
+.case{position:relative;width:min(760px,100%);max-height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--p-bg);border:var(--p-border);box-shadow:var(--p-shadow),0 40px 90px -30px #000;color:var(--ink);scrollbar-width:thin;scrollbar-color:rgba(216,189,126,.25) transparent}
+.case-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 10px 22px;background:linear-gradient(180deg,#14203a 70%,rgba(20,32,58,0));}
+.case-kicker{margin:0;font-size:13.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.case-x{appearance:none;border:1px solid transparent;background:transparent;color:var(--sub);font:inherit;font-size:18px;line-height:1;width:36px;height:36px;cursor:pointer}
+.case-x:hover{color:var(--gold-hi);border-color:var(--line)}
+.case-body{display:flex;flex-direction:column;gap:22px;padding:4px 28px 30px}
+.case-title h2{margin:0 0 8px;font-weight:500;font-size:38px;line-height:1.05}
+.case-title .d-one{margin:0 0 12px;font-size:17px}
+.case-meta{margin:0;display:flex;flex-wrap:wrap;gap:4px 0;font-size:14px;color:var(--muted)}
+.case-meta span:not(:last-child)::after{content:"·";margin:0 10px;color:var(--line)}
+.case-meta .live{color:var(--gold)}
+.case-meta .wip{color:var(--blue);font-style:italic}
+.gallery{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:rgba(216,189,126,.25) transparent}
+.gallery > div{flex:none;scroll-snap-align:start}
+.shot{appearance:none;display:block;padding:0;margin:0;border:1px solid var(--line);background:#0a1120;cursor:zoom-in;overflow:hidden;transition:border-color calc(.2s / var(--spd,1)),transform calc(.2s / var(--spd,1))}
+.shot:hover{border-color:var(--gold);transform:translateY(-2px)}
+.shot img{display:block;width:100%;height:100%;object-fit:cover}
+.shot.phone{width:150px;aspect-ratio:9/19.5;border-radius:16px;padding:5px;background:#05080f}
+.shot.phone img{border-radius:11px}
+.shot.poster{width:180px;aspect-ratio:9/16}
+.shot.window{width:430px;max-width:calc(100vw - 90px);display:flex;flex-direction:column}
+.shot.window img{height:auto;object-fit:contain}
+.shot-bar{display:flex;gap:5px;padding:6px 8px;background:#101a2f;border-bottom:1px solid var(--line-soft)}
+.shot-bar i{width:7px;height:7px;border-radius:50%;background:rgba(216,189,126,.35)}
+.case-sec h3{margin:0 0 9px;font-weight:600;font-size:13.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:12px}
+.case-sec h3::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.case-sec p{margin:0;font-size:16.5px;line-height:1.6;color:var(--ink)}
+.case-sec .d-pts{font-size:16px;gap:6px}
+.hard + .hard{margin-top:14px}
+.hard h4{margin:0 0 4px;font-weight:500;font-size:18px;font-style:italic;color:var(--gold-hi)}
+.hard p{color:var(--sub)}
+.lightbox{position:fixed;inset:0;z-index:2;display:grid;place-items:center;padding:24px;background:rgba(4,7,15,.9);cursor:zoom-out;animation:case-fade calc(.2s / var(--spd,1)) ease both}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain;border:1px solid var(--line);box-shadow:0 30px 80px -20px #000}
+@media (max-width:760px){
+  .case-scrim{padding:0;place-items:stretch}
+  .case{width:100%;max-height:none;height:100%;border-left:0;border-right:0;box-shadow:none}
+  .case-body{padding:4px 18px 28px}
+  .case-title h2{font-size:32px}
+  .shot.phone{width:130px}
+  .shot.poster{width:150px}
+}
+@media (prefers-reduced-motion:reduce){.case-scrim,.lightbox{animation:none}.shot{transition:none}}

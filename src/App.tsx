@@ -4,6 +4,8 @@ import { CFG, TUNER_ON, onRetune } from './config';
 import { Scene } from './scene/Scene';
 import { Docks } from './ui/Docks';
 import { Crumb, Hint, Toast } from './ui/Chrome';
+import { CaseFile } from './ui/CaseFile';
+import { useCaseHash } from './ui/caseHash';
 
 const Tuner = lazy(() => import('./dev/Tuner'));
 
@@ -16,6 +18,7 @@ export default function App() {
   const [focus, setFocus] = useState<HTMLDivElement | null>(null);
   const [left, setLeft] = useState<HTMLDivElement | null>(null);
   const [right, setRight] = useState<HTMLDivElement | null>(null);
+  useCaseHash();
 
   // CSS transitions follow the global animation speed; the panel grid strength is tunable.
   useEffect(() => {
@@ -52,6 +55,7 @@ export default function App() {
         <div className="dock dock-r" ref={setRight} aria-label="Right dock" />
       </div>
       {root && left && right && <Docks root={root} left={left} right={right} />}
+      <CaseFile />
       <Toast />
       {TUNER_ON && (
         <Suspense fallback={null}>

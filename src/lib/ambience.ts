@@ -8,11 +8,11 @@ import { storage } from './storage';
 const SRC = `${import.meta.env.BASE_URL}audio/space-ambience.mp3`;
 const KEY = 'cs-ambience';
 const XF = 4;
-const FADE_IN = 2.5, FADE_OUT = 0.6;
+const FADE_IN = 5, FADE_OUT = 0.6;
 
 interface Prefs { on: boolean; vol: number }
 const saved = storage.get<Prefs>(KEY);
-const prefs: Prefs = { on: saved?.on ?? true, vol: typeof saved?.vol === 'number' ? saved.vol : 0.45 };
+const prefs: Prefs = { on: saved?.on ?? true, vol: typeof saved?.vol === 'number' ? saved.vol : 0.25 };
 
 export interface AmbienceState { playing: boolean; vol: number }
 let snap: AmbienceState = { playing: false, vol: prefs.vol };

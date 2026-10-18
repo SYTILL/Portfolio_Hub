@@ -25,7 +25,13 @@ export const CASES: Record<string, CaseFile> = {
         body: 'Subscriptions live in RevenueCat on the device, while promo codes live in the database, so the server only knew half the story. Features that must be enforced server-side, like song requests, verify Pro through RevenueCat’s REST API inside a Supabase Edge Function.',
       },
     ],
-    result: ['Live on the App Store and Google Play, now at version 1.1.3', '215 monthly active users in August 2026'],
+    result: [
+      'Live on the App Store and Google Play, now at version 1.1.3',
+      'About 1,200 registered users and $220 in subscription revenue by October 17, 2026',
+      'On the App Store: 45.6K impressions, 3.36K product page views and 969 first-time downloads',
+      'An international audience: 39% use the app in Japanese, 36% in English and 20% in Traditional Chinese',
+      '43% of users say they found it by searching the App Store; TikTok, YouTube and Instagram follow',
+    ],
     shots: [
       { file: '1.webp', alt: 'Home screen with recently added songs and saved songs', kind: 'phone' },
       { file: '2.webp', alt: 'Lyric study screen with Korean lines, romanization and translation', kind: 'phone' },

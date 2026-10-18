@@ -80,7 +80,17 @@ function Star({ p }: { p: Project }) {
       <h3 className="d-name">{p.name}</h3>
       <p className="d-one">{p.track ? <>{p.one} · as <a href={ARTIST.url} target="_blank" rel="noopener">{ARTIST.name}</a></> : p.one}</p>
       {p.track && <TrackPlayer url={p.track.url} name={p.name} />}
-      {p.points && <ul className="d-pts">{p.points.map(x => <li key={x}>{x}</li>)}</ul>}
+      {p.role && <p className="d-role">{p.role}</p>}
+      {p.metrics && (
+        <div className="d-metrics">
+          <dl>
+            {p.metrics.items.map(([v, label]) => <div key={label}><dt>{label}</dt><dd>{v}</dd></div>)}
+          </dl>
+          {p.metrics.notes?.map(n => <p className="d-note" key={n}>{n}</p>)}
+          <p className="d-asof">As of {p.metrics.asOf}</p>
+        </div>
+      )}
+      {!p.metrics && p.points && <ul className="d-pts">{p.points.map(x => <li key={x}>{x}</li>)}</ul>}
       {!p.track && (
         <div className="tags">
           {p.stack.map(s => <span key={s}>{s}</span>)}

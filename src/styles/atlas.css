@@ -105,6 +105,13 @@ html,body{margin:0;height:100%;background:#04070f}
 .d-pts{margin:0;padding-left:17px;display:grid;gap:5px;font-size:15px;line-height:1.5}
 .d-pts li::marker{color:var(--gold)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
+.d-role{margin:0;font-size:14.5px;color:var(--sub)}
+.d-metrics dl{margin:2px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.d-metrics dl > div{display:flex;flex-direction:column-reverse;gap:3px;padding:9px 10px 8px;background:#0f182c}
+.d-metrics dd{margin:0;font-size:26px;line-height:1;color:var(--gold);font-variant-numeric:lining-nums tabular-nums}
+.d-metrics dt{font-size:13px;line-height:1.3;color:var(--sub)}
+.d-note{margin:8px 0 0;font-size:13.5px;line-height:1.45;color:var(--sub)}
+.d-asof{margin:6px 0 0;font-size:12.5px;font-style:italic;color:var(--muted)}
 .tags span{font-size:13.5px;border:1px solid var(--line-soft);background:rgba(13,21,40,.6);padding:3px 8px;color:var(--sub)}
 .tags .st{color:var(--blue);font-style:italic}
 .tags .st.live{color:var(--gold)}

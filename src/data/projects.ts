@@ -15,6 +15,10 @@ export interface Project {
   one: string;
   stack: string[];
   points?: string[];
+  /** Headline numbers for shipped apps, shown as tiles in Details instead of points. */
+  metrics?: { items: [value: string, label: string][]; asOf: string; notes?: string[] };
+  /** Who did what and over what time, one line. */
+  role?: string;
   links?: [label: string, url: string][];
   /** The long write-up shown in the case file. */
   case?: CaseFile;
@@ -47,7 +51,13 @@ export const CAT_KEYS = Object.keys(CATS) as CatKey[];
 const WORK: Project[] = [
   { id: 'beonyeok', name: 'Beonyeok', cat: 'mobile', start: '2026-03', status: 'live', statusText: 'Live on App Store & Google Play',
     one: 'Learn Korean through K-pop lyrics', stack: ['Expo', 'React Native', 'Supabase', 'RevenueCat', 'AdMob'],
-    points: ['Tap any word for its meaning, pronunciation and grammar; quizzes and study streaks', 'Google sign-in, subscriptions (RevenueCat) and ads (AdMob)', 'Landing pages in English, Japanese, Spanish, Portuguese and Chinese', 'Built a separate lyric-video tool with Python and Remotion'],
+    role: 'Solo: design, app, backend and launch · Mar 2026 – now',
+    // Supabase profiles, RevenueCat and App Store Connect, as of Oct 17, 2026.
+    metrics: {
+      asOf: 'Oct 17, 2026',
+      items: [['~1,200', 'registered users'], ['$220', 'subscription revenue'], ['45.6K', 'App Store impressions'], ['64%', 'non-English users']],
+      notes: ['By app language: Japanese 39% · English 36% · Chinese (Traditional) 20% · Spanish 3% · Portuguese 2%', 'How users found it: App Store 43% · TikTok 7% · YouTube 6% · Instagram 5% · Reddit 2%'],
+    },
     links: [['App Store', 'https://apps.apple.com/us/app/beonyeok-learn-korean-kpop/id6762500645'], ['Google Play', 'https://play.google.com/store/apps/details?id=com.bangusuk.beonyeok'], ['Website', 'https://bangusukdev.com/beonyeok']] },
   { id: 'badmorning', name: 'Bad Morning', cat: 'mobile', start: '2026-06', status: 'live', statusText: 'Live on Google Play · iOS in progress',
     one: 'An alarm you can only stop by solving a puzzle', stack: ['Expo', 'React Native', 'iOS AlarmKit', 'Android alarms'],

@@ -6,9 +6,11 @@ import { BYID, type CatKey } from '../data/projects';
 import { on } from '../lib/events';
 import { REDUCED_MOTION as RM } from '../lib/storage';
 import { getTheme } from '../lib/theme';
+import { logPlace, logSections } from '../lib/logScroll';
 import { actions, getState, subscribe } from '../state';
 import { clock, since } from './clock';
 import { nameBoxes, num, sky, toScreen, type StarData } from './registry';
+import { logPose } from './logPose';
 import { CENTERS, POS } from './util';
 
 /**
@@ -17,6 +19,8 @@ import { CENTERS, POS } from './util';
  * - Drag rotates; Ctrl/⌘ + wheel (or a trackpad pinch) zooms, so plain scrolling still scrolls.
  * - Follows the app state: full map, an open constellation, or a selected star.
  * - Shifts the projection so the map is centered in the empty area between the docks (focusEl).
+ * - In the mission log (view 'log'), follows the scroll instead: it sits at each section's pose and eases between
+ *   neighbours across their edges. Entering the map hands over from wherever the log left the camera.
  * - In edit mode (light theme), shows its own numbers in a small readout at the top-left of the map area.
  * - Owns pointer input on the map: hover and click on stars and constellation names, right-click to go back.
  */
@@ -50,7 +54,7 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
     const offState = subscribe(aim);
     const offTune = onRetune(k => { if (!k || k.startsWith('cam') || k.startsWith('intro')) aim(); });
     const offReplay = on('replay', () => {
-      if (RM || getState().focus) return;
+      if (RM || getState().focus || getState().view === 'log') return;
       rig.intro = true;
       rig.R = CFG.introFrom;
       rig.wantR = CFG.camHome;
@@ -175,8 +179,47 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
     };
   }, [rig, mapEl, get]);
 
+  const log = useMemo(() => ({
+    pos: new THREE.Vector3(), look: new THREE.Vector3(), a: new THREE.Vector3(), al: new THREE.Vector3(), b: new THREE.Vector3(), bl: new THREE.Vector3(),
+    started: false, inLog: false, tmp: new THREE.Vector3(),
+  }), []);
+
   useFrame(({ camera, size }) => {
     const cam = camera as THREE.PerspectiveCamera, dt = clock.dt, off = rig.off;
+    const realDt = dt / CFG.speed;
+
+    if (getState().view === 'log') {
+      const place = logPlace(logSections());
+      if (place) {
+        if (!log.started) { log.pos.copy(cam.position); log.look.set(0, 0, 0); log.started = true; }
+        const narrow = size.width < 860, t = performance.now() / 1000;
+        logPose(place.a.dataset.focus ?? 'intro', place.a.classList.contains('r'), narrow, t, log.a, log.al);
+        logPose(place.b.dataset.focus ?? 'intro', place.b.classList.contains('r'), narrow, t, log.b, log.bl);
+        log.a.lerp(log.b, place.k); log.al.lerp(log.bl, place.k);
+        // A light follow on top of the scroll position, so wheel steps glide instead of jumping.
+        const f = RM ? 1 : 1 - Math.pow(0.002, realDt);
+        log.pos.lerp(log.a, f); log.look.lerp(log.al, f);
+        off.x = off.y = 0;
+        if (cam.view?.enabled) cam.clearViewOffset();
+        cam.position.copy(log.pos);
+        cam.lookAt(log.look);
+        cam.updateMatrixWorld();
+        log.inLog = true;
+        return;
+      }
+    }
+    if (log.inLog) {
+      // Just left the log: continue the orbit from where the log camera is, so there is no jump.
+      log.inLog = false;
+      const o = log.tmp.copy(log.pos).sub(log.look);
+      rig.tgt.copy(log.look);
+      rig.R = o.length();
+      rig.ph = Math.min(2.7, Math.max(0.45, Math.acos(Math.max(-1, Math.min(1, o.y / rig.R)))));
+      rig.th = Math.atan2(o.x, o.z);
+      rig.vth = rig.vph = 0;
+      rig.intro = false;
+      rig.idle = 0;
+    }
     const k = RM ? 1 : 1 - Math.pow(0.004, dt);
     off.x += (off.tx - off.x) * k;
     off.y += (off.ty - off.y) * k;

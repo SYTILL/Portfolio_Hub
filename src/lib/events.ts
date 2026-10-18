@@ -1,6 +1,6 @@
 // Small app-wide signals: replay the entry sequence, fire a meteor, reset the panel layout, show a toast.
 const bus = new EventTarget();
-type Signal = 'replay' | 'meteor' | 'reset-layout';
+type Signal = 'replay' | 'meteor' | 'reset-layout' | 'enter-map';
 
 export const emit = (name: Signal) => bus.dispatchEvent(new Event(name));
 export const on = (name: Signal, fn: () => void) => {

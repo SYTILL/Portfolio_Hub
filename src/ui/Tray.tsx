@@ -2,12 +2,14 @@ import { useState, useSyncExternalStore } from 'react';
 import { MS, T } from '../config';
 import { storage } from '../lib/storage';
 import { getTheme, subscribeTheme, toggleTheme } from '../lib/theme';
+import { actions } from '../state';
 import { Ambience } from './Ambience';
 
 const TRIED = 'cs-theme-tried';
 
 /**
  * Bottom-left corner: the light/dark switch and, a little apart, the ambience player.
+ * On the map, a third chip goes back to the mission log.
  * Until the visitor has tried the switch once, a hand-written "try this" note points at it.
  */
 export function Tray({ root }: { root: HTMLElement }) {
@@ -38,6 +40,7 @@ export function Tray({ root }: { root: HTMLElement }) {
         </svg>
       </button>
       <Ambience />
+      <button type="button" className="tray-log" onClick={() => actions.setView('log')}><span aria-hidden="true">↑</span> Mission log</button>
     </div>
   );
 }

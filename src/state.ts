@@ -10,9 +10,13 @@ interface AppState {
   hintCat: CatKey | null;
   /** Project whose case file is open, if any. Mirrored in the URL hash (#nodt). */
   caseId: string | null;
+  /** 'log': the scrolling mission log over the map (the default first view). 'map': the full star map with its docks. */
+  view: 'log' | 'map';
 }
 
-let state: AppState = { focus: null, sel: null, hover: null, hintCat: null, caseId: null };
+// A link to #map skips the log.
+const startView: AppState['view'] = typeof location !== 'undefined' && location.hash === '#map' ? 'map' : 'log';
+let state: AppState = { focus: null, sel: null, hover: null, hintCat: null, caseId: null, view: startView };
 const subs = new Set<() => void>();
 
 export const getState = () => state;
@@ -62,6 +66,10 @@ export const actions = {
   },
   closeCase() {
     set({ caseId: null });
+  },
+  /** Switch between the mission log and the star map; both open on the full map. */
+  setView(view: AppState['view']) {
+    set({ view, focus: null, sel: null, hover: null, hintCat: null });
   },
   hover(id: string | null) {
     set({ hover: id, hintCat: id && BYID[id].cat !== state.focus ? BYID[id].cat : null });

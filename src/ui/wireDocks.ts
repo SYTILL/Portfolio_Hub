@@ -172,6 +172,7 @@ export function wireDocks(root: HTMLElement, L: HTMLElement, R: HTMLElement, hos
   root.addEventListener('keydown', onKey);
   const offReset = on('reset-layout', () => { storage.remove(LAYOUT_KEY); flip(() => apply(DEFAULT_LAYOUT)); });
   const offReplay = on('replay', () => playEntry(root));
+  const offEnter = on('enter-map', () => playEntry(root, true));
   let repaint = 0;
   const offTune = onRetune(k => {
     if (!k || k === 'panelStarAlpha' || k === 'panelStarDensity') { clearTimeout(repaint); repaint = window.setTimeout(() => paintPanels(root), 120); }
@@ -184,7 +185,7 @@ export function wireDocks(root: HTMLElement, L: HTMLElement, R: HTMLElement, hos
     root.removeEventListener('pointerup', onUp);
     root.removeEventListener('pointercancel', onUp);
     root.removeEventListener('keydown', onKey);
-    offReset(); offReplay(); offTune();
+    offReset(); offReplay(); offEnter(); offTune();
     clearTimeout(repaint);
   };
 }

@@ -7,6 +7,8 @@ import { Crumb, Hint, Toast } from './ui/Chrome';
 import { Tray } from './ui/Tray';
 import { CaseFile } from './ui/CaseFile';
 import { useCaseHash } from './ui/caseHash';
+import { MissionLog } from './ui/MissionLog';
+import { useAppState } from './state';
 
 const Tuner = lazy(() => import('./dev/Tuner'));
 
@@ -20,6 +22,7 @@ export default function App() {
   const [left, setLeft] = useState<HTMLDivElement | null>(null);
   const [right, setRight] = useState<HTMLDivElement | null>(null);
   useCaseHash();
+  const view = useAppState(s => s.view);
 
   // CSS transitions follow the global animation speed; the panel grid strength is tunable.
   useEffect(() => {
@@ -33,7 +36,7 @@ export default function App() {
   }, [root]);
 
   return (
-    <div className="cs" ref={setRoot}>
+    <div className={`cs${view === 'log' ? ' is-log' : ''}`} ref={setRoot}>
       <div className="cs-map" ref={setMap}>
         <Canvas
           flat
@@ -56,6 +59,7 @@ export default function App() {
         </div>
         <div className="dock dock-r" ref={setRight} aria-label="Right dock" />
       </div>
+      <MissionLog />
       {root && left && right && <Docks root={root} left={left} right={right} />}
       {root && <Tray root={root} />}
       <CaseFile />

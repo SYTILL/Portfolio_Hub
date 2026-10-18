@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { CFG, clamp01, onRetune } from '../config';
+import { CFG, T, clamp01, onRetune } from '../config';
 import { BYID, type CatKey } from '../data/projects';
 import { on } from '../lib/events';
 import { REDUCED_MOTION as RM } from '../lib/storage';
@@ -193,8 +193,10 @@ export function CameraRig({ mapEl, focusEl }: { mapEl: HTMLElement; focusEl: HTM
       if (place) {
         if (!log.started) { log.pos.copy(cam.position); log.look.set(0, 0, 0); log.started = true; }
         const narrow = size.width < 860, t = performance.now() / 1000;
-        logPose(place.a.dataset.focus ?? 'intro', place.a.classList.contains('r'), narrow, t, log.a, log.al);
-        logPose(place.b.dataset.focus ?? 'intro', place.b.classList.contains('r'), narrow, t, log.b, log.bl);
+        // The map first appears centred, then slides aside in step with the intro text (which rises at T.crumb).
+        const x = RM ? 1 : clamp01((since() - T.crumb) / 1.2), shift = x * x * (3 - 2 * x);
+        logPose(place.a.dataset.focus ?? 'intro', place.a.classList.contains('r'), narrow, t, log.a, log.al, shift);
+        logPose(place.b.dataset.focus ?? 'intro', place.b.classList.contains('r'), narrow, t, log.b, log.bl, shift);
         log.a.lerp(log.b, place.k); log.al.lerp(log.bl, place.k);
         // A light follow on top of the scroll position, so wheel steps glide instead of jumping.
         const f = RM ? 1 : 1 - Math.pow(0.002, realDt);

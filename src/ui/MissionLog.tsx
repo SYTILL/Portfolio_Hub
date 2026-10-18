@@ -135,9 +135,9 @@ export function MissionLog() {
   return (
     <div className="log" ref={box} inert={view !== 'log'} aria-hidden={view !== 'log'}>
       <div className="log-veil" aria-hidden="true" />
-      <button type="button" className="log-skip" onClick={enterMap}>Skip to the star map <span aria-hidden="true">↘</span></button>
+      <button type="button" className="log-skip rise" style={introDelay(5)} onClick={enterMap}>Skip to the star map <span aria-hidden="true">↘</span></button>
 
-      <nav className="log-rail" aria-label="Mission log">
+      <nav className="log-rail rise" style={introDelay(5)} aria-label="Mission log">
         <span className="fill" />
         {RAIL.map(([id, no, label]) => (
           <a key={id} href={`#${id}`} className={active === id ? 'on' : undefined} onClick={e => { e.preventDefault(); go(id); }}>

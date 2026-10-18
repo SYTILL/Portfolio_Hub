@@ -9,7 +9,8 @@ import { CENTERS, POS, hash } from './util';
 const UP = new THREE.Vector3(0, 1, 0), fwd = new THREE.Vector3(), right = new THREE.Vector3(), off = new THREE.Vector3();
 const isCat = (f: string): f is CatKey => (CAT_KEYS as string[]).includes(f);
 
-export function logPose(focus: string, cardRight: boolean, narrow: boolean, t: number, pos: THREE.Vector3, look: THREE.Vector3) {
+// introShift (0..1): on first load the map starts centred and slides aside as the intro text comes in.
+export function logPose(focus: string, cardRight: boolean, narrow: boolean, t: number, pos: THREE.Vector3, look: THREE.Vector3, introShift = 1) {
   const side = cardRight ? 1 : -1;
   const frame = (target: THREE.Vector3, shift: number) => {
     pos.copy(target).add(off);
@@ -31,11 +32,11 @@ export function logPose(focus: string, cardRight: boolean, narrow: boolean, t: n
     pos.set(Math.sin(a) * R, focus === 'map' ? 30 : 16, Math.cos(a) * R);
     look.set(0, 0, 0);
     if (focus === 'intro') {
-      if (narrow) look.y = -26;
+      if (narrow) look.y = -26 * introShift;
       else {
         fwd.copy(pos).negate().normalize();
         right.crossVectors(fwd, UP).normalize();
-        look.addScaledVector(right, -42);
+        look.addScaledVector(right, -42 * introShift);
       }
     }
   }

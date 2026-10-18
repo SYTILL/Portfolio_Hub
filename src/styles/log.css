@@ -143,3 +143,6 @@
   .log-skip{font-size:13.5px;padding:6px 10px}
 }
 @media (prefers-reduced-motion:reduce){.log .rise,.log .begin i{animation:none}.log,.cs .cs-ui,.log-rail .fill{transition:none}}
+/* in the log the map is scenery: no constellation or star names behind the cards */
+.cs.is-log .lbl-layer{opacity:0}
+.lbl-layer{transition:opacity calc(.5s / var(--spd,1)) ease}

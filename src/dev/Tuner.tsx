@@ -23,6 +23,7 @@ const SCHEMA: { g: string; open?: boolean; items: Item[] }[] = [
     { k: 'step', label: '별 사이 간격', min: 0, max: 1, step: 0.01, kind: 'time' },
     { k: 'rise', label: '별 하나가 켜지는 시간', min: 0.05, max: 3, step: 0.05, kind: 'time' },
     { k: 'hint', label: '아래 안내 문구 등장', min: 0, max: 15, step: 0.1, kind: 'time' },
+    { k: 'logIntro', label: '미션 로그 인트로 텍스트 등장', min: 0, max: 6, step: 0.05, kind: 'time' },
   ] },
   { g: '혼천의 고리', items: [
     { k: 'ringAlpha', label: '선 밝기', min: 0, max: 4, step: 0.05, unit: '×' },

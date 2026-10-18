@@ -5,7 +5,7 @@ import { storage } from './lib/storage';
 export const DEFAULTS = {
   speed: 0.5,
   // entry sequence (seconds)
-  core: 0.15, ring1: 0.15, ringGap: 0.15, ringDur: 0.85, panels: 1.5, panelStep: 0.15, crumb: 1.6, stars: 0.3, step: 0.08, rise: 0.25, hint: 1.7,
+  core: 0.15, ring1: 0.15, ringGap: 0.15, ringDur: 0.85, panels: 1.5, panelStep: 0.15, crumb: 1.6, stars: 0.3, step: 0.08, rise: 0.25, hint: 1.7, logIntro: 0.9,
   // armillary rings
   ringAlpha: 1.3, ringSpin: 1,
   // stars, lines, labels
@@ -49,6 +49,8 @@ export const T = {
   get step() { return CFG.step; },
   get rise() { return CFG.rise; },
   get hint() { return CFG.hint; },
+  /** When the mission log's intro text starts to rise (and the map starts sliding aside). */
+  get logIntro() { return CFG.logIntro; },
   get meteor() { return CFG.meteorFirst; },
 };
 

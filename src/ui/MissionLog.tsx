@@ -130,7 +130,7 @@ export function MissionLog() {
   }, [view]);
 
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
-  const introDelay = (i: number) => ({ animationDelay: `${MS(T.crumb * 1000 + i * 140)}ms` });
+  const introDelay = (i: number) => ({ animationDelay: `${MS(T.logIntro * 1000 + i * 140)}ms` });
 
   return (
     <div className="log" ref={box} inert={view !== 'log'} aria-hidden={view !== 'log'}>

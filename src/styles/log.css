@@ -57,7 +57,7 @@
 @keyframes log-rise{from{opacity:0;translate:0 16px;filter:blur(6px)}}
 
 /* mission card */
-.log .card{width:min(540px,100%);padding:clamp(20px,2.4vw,28px);display:grid;gap:14px;min-width:0}
+.log .card{width:min(540px,100%);padding:clamp(18px,2.2vw,26px);display:grid;gap:12px;min-width:0}
 .log .m-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
 .log .m-no{margin:0;font-size:13.5px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
 .log .m-meta{margin:0;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -76,7 +76,7 @@
 .log .blk h3::after{content:"";flex:1;height:1px;background:var(--line-soft)}
 .log .blk p{margin:0;font-size:16.5px;line-height:1.55}
 .log .shots{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.log .shots img{display:block;height:165px;width:auto;flex:none;border:1px solid var(--line);background:#05080f}
+.log .shots img{display:block;height:130px;width:auto;flex:none;border:1px solid var(--line);background:#05080f}
 .log .shots.phone img{border-radius:14px;padding:4px}
 .log .shots.wide img{height:auto;width:100%}
 .log .stack{display:flex;flex-wrap:wrap;gap:6px}

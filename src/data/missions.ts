@@ -16,6 +16,8 @@ export interface Mission {
   tiles: [value: string, label: string][];
   asOf?: string;
   block: { title: string; body: string };
+  /** An optional second story, e.g. a product decision next to the technical one. */
+  block2?: { title: string; body: string };
   shots?: { kind: 'phone' | 'poster' | 'wide'; project: string; files: string[] };
   tracks?: string[];
   stack?: string[];
@@ -33,6 +35,7 @@ export const MISSIONS: Mission[] = [
     tiles: beonyeok.metrics!.items.map(([v, l]) => [v, l]),
     asOf: `As of ${beonyeok.metrics!.asOf} · Japanese 39%, English 36%, Traditional Chinese 20%`,
     block: { title: 'Hardest problem', body: 'Cloud traffic reached 8.31 GB against a 5 GB free tier, for a 50 MB database. I traced it to album covers downloading again every hour and fixed it with long cache headers, thumbnails, disk caching and a song list cut from 3.4 MB to about 90 KB.' },
+    block2: { title: 'Product lesson', body: "Song requests let each user ask for one song at a time, and another once it was added. Ratings fell anyway, over slow requests. It was loss aversion, which I had studied in nudge design: every pending request read as the songs they could have asked for if I had been faster. Limiting each user to a single request ended the complaints." },
     shots: { kind: 'phone', project: 'beonyeok', files: ['1.webp', '2.webp', '3.webp'] },
     stack: beonyeok.stack,
     links: beonyeok.links!.filter(([l]) => l !== 'Website'),

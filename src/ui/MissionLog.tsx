@@ -24,6 +24,7 @@ function Card({ m, no }: { m: Mission; no: number }) {
       </dl>
       {m.asOf && <p className="asof">{m.asOf}</p>}
       <div className="blk"><h3>{m.block.title}</h3><p>{m.block.body}</p></div>
+      {m.block2 && <div className="blk"><h3>{m.block2.title}</h3><p>{m.block2.body}</p></div>}
       {m.shots && (
         <div className={`shots ${m.shots.kind}`}>
           {m.shots.files.map(f => <img key={f} src={shotUrl(m.shots!.project, f)} alt={altOf(m.shots!.project, f)} loading="lazy" decoding="async" />)}

@@ -21,6 +21,10 @@ export const CASES: Record<string, CaseFile> = {
         body: 'In August the Supabase dashboard showed 8.31 GB of cached egress against a 5 GB limit, for a 50 MB database. I traced it to album covers being downloaded again every hour: storage served them with a one-hour cache header, and React Native’s default image cache was too small to keep them. The fix was long-lived cache headers and thumbnails for covers, expo-image disk caching, a song list trimmed from about 3.4 MB to 90 KB (estimated for 300 songs), random picks moved into a server function, and a 24-hour persisted query cache.',
       },
       {
+        title: 'Faster song requests made users angrier',
+        body: 'At first I chose and uploaded every song myself, but deciding what to add next was hard, so I opened song requests: one open request per user, and a new one once it was added. Instead of happier users, bad ratings started to arrive, complaining that requested songs took too long. It reminded me of loss aversion from studying nudge design: people feel a loss more sharply than a gain, so a waiting request read as all the songs they could have requested if I had been quicker. I changed the rule so each user can request only one song in total, and the complaints stopped.',
+      },
+      {
         title: 'A Pro check the server can trust',
         body: 'Subscriptions live in RevenueCat on the device, while promo codes live in the database, so the server only knew half the story. Features that must be enforced server-side, like song requests, verify Pro through RevenueCat’s REST API inside a Supabase Edge Function.',
       },

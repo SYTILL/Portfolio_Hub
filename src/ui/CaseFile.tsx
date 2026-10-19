@@ -68,11 +68,12 @@ export function CaseFile() {
             </p>
           </div>
 
+          <section className="case-sec case-what"><h3>What it is</h3><p>{c.why}</p></section>
+
           <div className="gallery" role="list" aria-label="Screenshots">
             {c.shots.map(s => <div role="listitem" key={s.file}><Figure id={p.id} shot={s} onOpen={() => setZoom(s)} /></div>)}
           </div>
 
-          <section className="case-sec"><h3>Why</h3><p>{c.why}</p></section>
           <section className="case-sec"><h3>What I built</h3><ul className="d-pts">{c.built.map(b => <li key={b}>{b}</li>)}</ul></section>
           <section className="case-sec">
             <h3>Hard parts</h3>

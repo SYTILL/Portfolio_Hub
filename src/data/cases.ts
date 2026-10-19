@@ -2,13 +2,13 @@ import type { CaseFile } from './projects';
 
 // Long write-ups for the case file, keyed by project id. Screenshots live in public/shots/<id>/.
 // Only facts from each project's own docs and commits; no invented numbers.
-// Written for someone hiring: what it is and why, the few things that matter in what was built,
+// Written for someone hiring: what the product is (`why` opens the file), the few things that matter in what was built,
 // the hardest problems and how they were solved, and the results. Routine features are left out.
 export const CASES: Record<string, CaseFile> = {
   beonyeok: {
     role: 'Solo · product, design, app and backend',
     period: 'Mar 2026 – present',
-    why: 'K-pop fans already know the songs by heart. Beonyeok turns those lyrics into Korean lessons: read a line, tap any word, and learn it in the context of a song you love.',
+    why: 'Beonyeok is a Korean-learning app for iOS and Android that teaches through K-pop lyrics. Learners study a song line by line, tap any word for its meaning, pronunciation and grammar, and keep what they learn in a vocabulary book with quizzes. Fans already know the songs by heart, so the words stick.',
     built: [
       'Line-by-line lyric study: tap any word for its meaning, pronunciation and grammar, then review it in a vocabulary book and quizzes',
       'Subscriptions and ads (RevenueCat, AdMob), with Pro verified on the server for the features it must enforce',
@@ -42,7 +42,7 @@ export const CASES: Record<string, CaseFile> = {
   badmorning: {
     role: 'Solo · product, design, app and native alarm modules',
     period: 'Jun 2026 – present',
-    why: 'Snoozing is too easy. Bad Morning keeps ringing until you finish a wake-up mission, so by the time it goes quiet you are actually awake.',
+    why: 'Bad Morning is an alarm app for Android and iOS that will not go quiet until you finish a wake-up mission. Snoozing is too easy; by the time the alarm stops, you are actually awake.',
     built: [
       '22 wake-up missions',
       'Android exact alarms that take over the lock screen in full screen',
@@ -69,7 +69,7 @@ export const CASES: Record<string, CaseFile> = {
   nodt: {
     role: 'Solo · product, design and desktop app',
     period: 'Sep 2026',
-    why: 'Most note apps ask where a note should live. Nodt asks where the thought goes next: every note opens into child notes side by side, with no folders or tags to manage.',
+    why: 'Nodt is a note-taking app for Windows built around following a thought. Every note opens into child notes in panels side by side, so instead of filing notes into folders you keep going deeper into an idea. Notes are saved as plain Markdown files.',
     built: [
       'Panels that open to the right as you follow a thought deeper',
       'Rich-text editing, with every note saved as a Markdown file on disk',
@@ -92,7 +92,7 @@ export const CASES: Record<string, CaseFile> = {
   pitchview: {
     role: 'Solo · design and desktop app',
     period: 'Oct 2026',
-    why: 'I wanted to see which notes are sounding in a piano recording while it plays, without importing files or opening a DAW.',
+    why: 'PitchView is a small Windows app that shows, live, which musical notes are sounding in whatever your PC is playing. It listens to the speaker output or a microphone and marks the notes on a piano keyboard, with no files to import and no music software to open.',
     built: [
       'Listens to whatever the PC is playing through WASAPI loopback, or to a microphone',
       'A live spectrum and a piano roll that shows the detected notes on each key',
@@ -115,7 +115,7 @@ export const CASES: Record<string, CaseFile> = {
   fsr: {
     role: 'Solo · design and desktop app',
     period: 'Oct 2026',
-    why: 'Recording a quick clip shouldn’t need an editor, an account or an upload. FastScreenRecorder is a small bar: press F9, and an MP4 lands in your Videos folder.',
+    why: 'FastScreenRecorder is a lightweight screen recorder for Windows: a small bar that starts recording when you press F9 and saves an MP4 to your Videos folder, with no editor, account or upload.',
     built: [
       'Record the whole screen, one window or an area, with system sound and microphone',
       'Hardware encoding on NVIDIA, Intel or AMD GPUs through FFmpeg, at 60 fps',
@@ -134,7 +134,7 @@ export const CASES: Record<string, CaseFile> = {
   site: {
     role: 'Solo · design and web',
     period: 'May 2026 – present',
-    why: 'Every app needs a home: a landing page, privacy and terms pages for the stores, and sometimes a checkout. One Next.js site serves all of them.',
+    why: 'bangusukdev.com is the website for all of my apps. It hosts each app’s landing page, the privacy and terms pages the app stores require, and checkout, from one Next.js codebase.',
     built: [
       'Landing pages for five apps, each in its own visual style, joined by one home page',
       'The privacy, terms and data-deletion pages the App Store and Google Play require',

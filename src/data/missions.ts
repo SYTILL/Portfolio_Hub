@@ -31,7 +31,7 @@ export const MISSIONS: Mission[] = [
   {
     id: 'beonyeok', focus: 'beonyeok', side: 'r',
     meta: `${CATNO.beonyeok} · Mobile · Mar 2026 – now`,
-    title: 'Beonyeok', one: 'Learn Korean through K-pop lyrics.', status: 'Live on the App Store and Google Play',
+    title: 'Beonyeok', one: 'A Korean-learning app for iOS and Android. Learners study K-pop songs line by line and tap any word for its meaning, pronunciation and grammar.', status: 'Live on the App Store and Google Play',
     tiles: beonyeok.metrics!.items.map(([v, l]) => [v, l]),
     asOf: `As of ${beonyeok.metrics!.asOf} · Japanese 39%, English 36%, Traditional Chinese 20%`,
     block: { title: 'Hardest problem', body: 'Cloud traffic reached 8.31 GB against a 5 GB free tier, for a 50 MB database. I traced it to album covers downloading again every hour and fixed it with long cache headers, thumbnails, disk caching and a song list cut from 3.4 MB to about 90 KB.' },
@@ -44,7 +44,7 @@ export const MISSIONS: Mission[] = [
   {
     id: 'badmorning', focus: 'badmorning', side: 'l',
     meta: `${CATNO.badmorning} · Mobile · Jun 2026 – now`,
-    title: 'Bad Morning', one: 'An alarm that keeps ringing until you finish a wake-up mission.', status: 'Live on Google Play · iOS built',
+    title: 'Bad Morning', one: 'An alarm app for Android and iOS that keeps ringing until you finish a wake-up mission, so you cannot snooze back to sleep.', status: 'Live on Google Play · iOS built',
     tiles: [['22', 'wake-up missions'], ['2', 'platforms, one codebase'], ['2', 'languages']],
     block: { title: 'Hardest problem', body: 'iOS always puts a Stop button on the lock screen, so a sleepy user could skip the mission entirely. I closed it in three layers: Stop opens the app, a second ring follows 15 seconds later unless the mission is done, and a rolling 5-second ring brings the alarm back if the app is force-quit.' },
     shots: { kind: 'poster', project: 'badmorning', files: ['1.webp', '2.webp', '3.webp'] },
@@ -55,7 +55,7 @@ export const MISSIONS: Mission[] = [
   {
     id: 'nodt', focus: 'nodt', side: 'r',
     meta: `${CATNO.nodt} · Desktop · Sep 2026`,
-    title: 'Nodt', one: 'A notes app where each thought opens into the next.', status: 'Free on Windows',
+    title: 'Nodt', one: 'A note-taking app for Windows where every note opens into child notes side by side, so you follow a thought deeper instead of filing it into folders.', status: 'Free on Windows',
     tiles: [['3', 'days to version 0.1'], ['19', 'commits'], ['6', 'color themes']],
     block: { title: 'Hardest problem', body: "Every note has exactly one parent, and the order of links in the parent's text sets the order of its children. Dragging a panel has to move the link in the parent, and deleting a link removes the branch beneath it, with the editor, the panels and the Markdown files on disk kept in step." },
     shots: { kind: 'wide', project: 'nodt', files: ['1.webp'] },
@@ -66,7 +66,7 @@ export const MISSIONS: Mission[] = [
   {
     id: 'aonova', focus: 'music', side: 'l',
     meta: 'AO · Music · about 5 years',
-    title: ARTIST.name, one: 'Electronic music I write and release on SoundCloud.', status: '28 tracks on SoundCloud',
+    title: ARTIST.name, one: 'Electronic music I write, produce and release on SoundCloud as aonova.', status: '28 tracks on SoundCloud',
     tiles: [['~5', 'years producing'], ['28', 'tracks released'], ['1.3K', 'plays on Comet']],
     block: { title: 'About', body: 'I produce in FL Studio. Most of my releases are future riddim, with melodic dubstep and house along the way, and I can write in whatever genre a project needs. The ambience playing behind this page is mine too.' },
     tracks: ['comingback', 'cantsleep', 'exit82', 'comet'],

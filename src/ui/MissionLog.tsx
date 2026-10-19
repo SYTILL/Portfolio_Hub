@@ -202,8 +202,8 @@ export function MissionLog() {
           <span className="meter"><i /></span>
         </div>
         <button type="button" className="enter" onClick={enterMap}>Open the star map <span aria-hidden="true">→</span></button>
+        <p className="log-foot">© 2026 Cosmic Syntax by Junsang Yoon</p>
       </section>
-      <p className="log-foot">© 2026 Cosmic Syntax by Junsang Yoon</p>
     </div>
   );
 }
